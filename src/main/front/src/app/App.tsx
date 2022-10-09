@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../App.css';
 import Navbar from '../components/Navbar';
+import Board from '../components/Board';
 
 const MainPage = () => {
 
@@ -29,6 +30,7 @@ function App() {
   return (
     <div className="App">
       <Navbar />
+      <Board />
       <MainPage />
     </div>
   );
