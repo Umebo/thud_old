@@ -3,6 +3,12 @@ import axios from 'axios';
 import '../App.css';
 import Navbar from '../components/Navbar';
 import Board from '../components/Board';
+import styled from 'styled-components';
+
+const AppStyled = styled.div`
+  place-content: center;
+  display: grid;
+`;
 
 const MainPage = () => {
 
@@ -28,11 +34,11 @@ const MainPage = () => {
 
 function App() {
   return (
-    <div className="App">
+    <AppStyled>
       <Navbar />
       <Board />
       <MainPage />
-    </div>
+    </AppStyled>
   );
 }
 
