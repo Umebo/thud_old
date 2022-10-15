@@ -1,30 +1,28 @@
-import React from 'react';
 import styled from 'styled-components';
 
-const TileStyle = styled.button`
-    width: 50px
-    height: 50px
+const TILE = styled.div<TileProps>`
+width: 45px;
+height: 45px;
+margin: 2px;
+border-radius: 5px;
+background-color: ${(p) => p.tileColor};
+text-align: center;
+color: white;
 `;
 
-type TileProps = {
-    dimX: string;
-    dimY: string;
+interface TileProps {
+    dimX?: string,
+    dimY?: string,
+    tileColor: string
 }
 
-class Tile extends React.Component<TileProps> {
-/* 
-    constructor(props: TileProps) {
-        super(props);
-        this.state = {
-            value: null
-        }
-    } */
+const Tile = (props: TileProps) => {
 
-    render() {
-        return(
-            <TileStyle>[{this.props.dimY},{this.props.dimX}]</TileStyle>
-        )
-    }
+    return(
+        <TILE tileColor={props.tileColor}>
+            {props.dimX}{props.dimY}
+        </TILE>
+    ) 
 }
 
 export default Tile;

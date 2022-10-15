@@ -8,6 +8,7 @@ import styled from 'styled-components';
 const AppStyled = styled.div`
   place-content: center;
   display: grid;
+  background-color: #DCD7C9;
 `;
 
 const MainPage = () => {
