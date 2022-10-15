@@ -2,7 +2,7 @@ import React from 'react';
 import Tile from './Tile';
 import styled from 'styled-components';
 
-const BoardStyle = styled.div`
+const BOARD = styled.div`
     display: grid;
     flex-wrap: wrap;
     border: 10px;
@@ -28,7 +28,7 @@ const Board = () => {
         
         for(let j = 0; j < rowLengths[i]; j++) {
             let tileColor = '#3F4E4F';
-            if((verticalDim + i + j) % 2 != 0) tileColor = '#2C3639';
+            if((verticalDim + i + j) % 2 !== 0) tileColor = '#2C3639';
             row.push(
                     <Tile
                         tileColor={tileColor}
@@ -42,9 +42,9 @@ const Board = () => {
     }
 
     return (
-        <BoardStyle>
+        <BOARD>
             {board}
-        </BoardStyle>
+        </BOARD>
     )
 }
 

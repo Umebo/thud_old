@@ -1,46 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import '../App.css';
-import Navbar from '../components/Navbar';
-import Board from '../components/Board';
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 import styled from 'styled-components';
+import '../App.css';
+import Main from '../pages/Main'
 
-const AppStyled = styled.div`
-  place-content: center;
-  display: grid;
-  background-color: #DCD7C9;
+const APP = styled.div`
+  height: 100vh
 `;
-
-const MainPage = () => {
-
-  const [response, getResponse] = useState([]);
-
-  useEffect(() => {
-    
-    axios
-      .get("http://localhost:8080/thud")
-      .then(res => {
-        console.log(res);
-        getResponse(res.data);
-      });
-    }, []);
-
-  return (
-      <div>
-        <h1>{response}</h1>
-      </div>
-  );
-
-}
-
-function App() {
-  return (
-    <AppStyled>
-      <Navbar />
-      <Board />
-      <MainPage />
-    </AppStyled>
-  );
+class App extends React.Component {
+  render() {
+    return(
+      <APP>
+        <Routes>
+          <Route path='/' element={<Main />}/>
+        </Routes>
+      </APP>
+    )  
+  }
 }
 
 export default App;

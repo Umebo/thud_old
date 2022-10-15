@@ -20,7 +20,7 @@ const Tile = (props: TileProps) => {
 
     return(
         <TILE tileColor={props.tileColor}>
-            {props.dimX}{props.dimY}
+            {/* {props.dimX}{props.dimY} */}
         </TILE>
     ) 
 }
