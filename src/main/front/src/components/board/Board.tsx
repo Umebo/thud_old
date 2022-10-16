@@ -2,10 +2,10 @@ import React from 'react';
 import Tile from './Tile';
 import styled from 'styled-components';
 
-const BOARD = styled.div`
+const BoardWrapper = styled.div`
     display: grid;
-    flex-wrap: wrap;
-    border: 10px;
+    grid-auto-rows: min-content;
+    padding: 30px;
 `;
 
 const RowStyle = styled.div`
@@ -42,9 +42,9 @@ const Board = () => {
     }
 
     return (
-        <BOARD>
+        <BoardWrapper>
             {board}
-        </BOARD>
+        </BoardWrapper>
     )
 }
 

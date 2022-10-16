@@ -1,20 +1,25 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
 import styled from 'styled-components';
 import '../App.css';
-import Main from '../pages/Main'
+import Footer from '../components/Footer';
+import Main from '../components/Main'
+import Navigation from '../components/Navigation';
 
-const APP = styled.div`
-  height: 100vh
+const LayoutWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
 `;
+
 class App extends React.Component {
   render() {
     return(
-      <APP>
-        <Routes>
-          <Route path='/' element={<Main />}/>
-        </Routes>
-      </APP>
+      <LayoutWrapper>
+        <Navigation />
+        <Main />
+        <Footer />
+      </LayoutWrapper>
     )  
   }
 }

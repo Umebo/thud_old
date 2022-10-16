@@ -1,3 +1,61 @@
+html, body {
+  margin:0;
+  padding:0;
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+}
+
 .App {
   text-align: center;
+  display: inline-block;
 }
+
+/* ------------ NAVBAR ------------- */
+
+.navbar {
+  display: flex;
+  height: 6rem;
+  text-decoration: none;
+  font-family: 'Rubik Mono One';
+  background-color: #2C3639;
+  align-items: center;
+}
+
+.container-fluid {
+  display: flex;
+  width: 100%;
+}
+
+.navbar-brand {
+  padding-left: 3.5rem;
+  text-decoration: none;
+  font-size: 3.5rem;
+  color: #A27B5C;
+  justify-content: start;
+}
+
+.nav {
+  display: flex;
+  margin-left: auto;
+  list-style-type: none;
+  align-items: center;
+  justify-content: end;
+}
+
+.nav-item {
+  text-decoration: none;
+  font-size: larger;
+  padding-right: 3rem;
+}
+
+.nav-link {
+  color: #A27B5C;
+  text-decoration: none;
+  
+}
+
+/* --------------------------------- */

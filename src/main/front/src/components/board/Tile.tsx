@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 const TILE = styled.div<TileProps>`
-width: 45px;
-height: 45px;
+width: 50px;
+height: 50px;
 margin: 2px;
 border-radius: 5px;
 background-color: ${(p) => p.tileColor};

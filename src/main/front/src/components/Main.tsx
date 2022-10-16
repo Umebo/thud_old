@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../App.css';
-import Navbar from '../components/AppNavbar';
-import Board from '../components/Board';
+import Board from './board/Board';
 import styled from 'styled-components';
+import Sidebar from './Sidebar';
 
-const MAIN = styled.div`
+const MainWrapper = styled.div`
+    display: flex;
     background-color: #DCD7C9;
-    position: static;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
 `;
 
 const Main = () => {
@@ -26,11 +27,10 @@ const Main = () => {
     }, []);
 
     return (
-        <MAIN>
-            <Navbar />
+        <MainWrapper>
             <Board />
-            <div>{response}</div>
-        </MAIN>
+            <Sidebar />
+        </MainWrapper>
     );
 
 }
