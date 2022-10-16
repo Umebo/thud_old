@@ -1,46 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import '../App.css';
-import Navbar from '../components/Navbar';
-import Board from '../components/Board';
+import React from 'react';
 import styled from 'styled-components';
+import '../App.css';
+import Footer from '../components/Footer';
+import Main from '../components/Main'
+import Navigation from '../components/Navigation';
 
-const AppStyled = styled.div`
-  place-content: center;
-  display: grid;
-  background-color: #DCD7C9;
+const LayoutWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
 `;
 
-const MainPage = () => {
-
-  const [response, getResponse] = useState([]);
-
-  useEffect(() => {
-    
-    axios
-      .get("http://localhost:8080/thud")
-      .then(res => {
-        console.log(res);
-        getResponse(res.data);
-      });
-    }, []);
-
-  return (
-      <div>
-        <h1>{response}</h1>
-      </div>
-  );
-
-}
-
-function App() {
-  return (
-    <AppStyled>
-      <Navbar />
-      <Board />
-      <MainPage />
-    </AppStyled>
-  );
+class App extends React.Component {
+  render() {
+    return(
+      <LayoutWrapper>
+        <Navigation />
+        <Main />
+        <Footer />
+      </LayoutWrapper>
+    )  
+  }
 }
 
 export default App;

@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 const TILE = styled.div<TileProps>`
-width: 45px;
-height: 45px;
+width: 50px;
+height: 50px;
 margin: 2px;
 border-radius: 5px;
 background-color: ${(p) => p.tileColor};
@@ -20,7 +20,7 @@ const Tile = (props: TileProps) => {
 
     return(
         <TILE tileColor={props.tileColor}>
-            {props.dimX}{props.dimY}
+            {/* {props.dimX}{props.dimY} */}
         </TILE>
     ) 
 }
