@@ -7,6 +7,7 @@ html, body {
 #root {
   height: 100%;
   width: 100%;
+  font-family: 'Rubik Mono One';
 }
 
 .App {
@@ -20,7 +21,6 @@ html, body {
   display: flex;
   height: 6rem;
   text-decoration: none;
-  font-family: 'Rubik Mono One';
   background-color: #2C3639;
   align-items: center;
 }
@@ -59,3 +59,8 @@ html, body {
 }
 
 /* --------------------------------- */
+
+/* --------- Login form ------------ */
+
+#nickname_input {
+}

@@ -3,7 +3,7 @@ import axios from 'axios';
 import '../App.css';
 import Board from './board/Board';
 import styled from 'styled-components';
-import Sidebar from './Sidebar';
+import Sidebar from './sidebar/Sidebar';
 
 const MainWrapper = styled.div`
     display: flex;

@@ -19,7 +19,7 @@ class Navigation extends React.Component {
                         <NavLink tag={Link} to="/">New game</NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink tag={Link} to="/">Login</NavLink>
+                        <NavLink tag={Link} to="/login">Login</NavLink>
                     </NavItem>
                 </Nav>
             </Navbar>
