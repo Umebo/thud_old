@@ -5,5 +5,8 @@
         "SECONDARY": "#3F4E4F",
         "BACKGROUND": "#DCD7C9",
         "FONT": "#A27B5C"
+    },
+    "SIDEBAR_COLORS": {
+        "BACKGORUND": "#a27b5c96"
     }
 }

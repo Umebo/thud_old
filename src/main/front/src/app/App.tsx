@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 import '../App.css';
 import Footer from '../components/Footer';
@@ -9,11 +8,10 @@ const LayoutWrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  width: 100%;
 `;
 
-class App extends React.Component {
-  render() {
+const App = () => {
+    
     return(
       <LayoutWrapper>
         <Navigation />
@@ -21,7 +19,6 @@ class App extends React.Component {
         <Footer />
       </LayoutWrapper>
     )  
-  }
 }
 
 export default App;

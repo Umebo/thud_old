@@ -3,13 +3,14 @@ import axios from 'axios';
 import '../App.css';
 import Board from './board/Board';
 import styled from 'styled-components';
+import configData from "../config.json";
 import Sidebar from './sidebar/Sidebar';
 
 const MainWrapper = styled.div`
-    display: flex;
-    background-color: #DCD7C9;
-    width: 100%;
-    height: 100%;
+    display: inline-flex;
+    flex: 2 1 auto;
+    padding-bottom: 30px;
+    background-color: ${configData.THEME_COLORS.BACKGROUND};
 `;
 
 const Main = () => {
