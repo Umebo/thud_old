@@ -4,12 +4,12 @@ import com.igniemie.thud.exception.NicknameValidationException;
 import com.igniemie.thud.service.ILoginService;
 import com.igniemie.thud.session.PlayerSession;
 import com.igniemie.thud.validator.NicknameValidator;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -28,22 +28,22 @@ public class LoginController {
         this.loginService = loginService;
     }
 
-    @GetMapping
-    public String loginForm(Model model) {
-        model.addAttribute("logged", this.playerSession.isLogged());
-        return "login";
+    @GetMapping()
+    @ResponseBody
+    public String get() {
+        return "WORKS";
     }
-
-    @PostMapping
-    public void login(HttpServletResponse response, @RequestParam String nickname) {
+    @PostMapping()
+    public void login(@RequestParam String nickname) {
         try {
             NicknameValidator.validateNickname(nickname);
+            System.out.println("logged! : " + nickname);
+            loginService.login(nickname);
+            System.out.println(playerSession.isLogged());
         } catch (NicknameValidationException e) {
-            response.setHeader("Location", "localhost:3000/");
+            System.out.println(e);
         }
 /*
-        this.loginService.login(nickname);
-
         if(this.playerSession.isLogged()) {
             return "redirect:/game";
         } else {
