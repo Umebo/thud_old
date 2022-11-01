@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
-import { Card, Row } from 'reactstrap';
 import styled from 'styled-components';
-import Nickname from './Nickname';
+import Nickname from './panels/Nickname';
 import Routing from './Routing';
 
 const SidebarWrapper = styled.div`
@@ -12,18 +10,23 @@ const SidebarWrapper = styled.div`
     flex-direction: column;
 `;
 
-const CardStyling = {
-    'backgroud-color': '#a27b5caf'
+interface SidebarProps {
+    logged: boolean
+    nickname: string
+    setLogged: (isLogged: boolean) => any
+    signIn: (nickname: any) => any
 }
 
-const Sidebar = () => {
-    const [logged, setLogged] = useState(false);
-    const [nickname, setNickname] = useState('');
+const Sidebar = ({ logged, nickname, setLogged, signIn }: SidebarProps) => {
 
     return(
         <SidebarWrapper>
-            <Routing />
-            <Nickname />
+            <Routing 
+                signIn={ signIn }
+                setLogged={ setLogged }/>
+            <Nickname 
+                nickname={ nickname }
+                isLogged={ logged }/>
         </SidebarWrapper>
     )
 }

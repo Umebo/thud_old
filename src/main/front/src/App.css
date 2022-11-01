@@ -34,9 +34,16 @@ html, body, #root {
   color: #A27B5C;
 }
 
-/* ------------- CARDS ------------- */
+/* --------- SIDEBAR CARDS --------- */
 
 .card {
   background-color: #a27b5caf;
   margin-bottom: 20px;
+}
+
+#nickname {
+  position: fixed;
+  right: 20px;
+  bottom: 30px;
+  /* margin-bottom: 0; */
 }

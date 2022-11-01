@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import '../App.css';
 import Footer from '../components/Footer';
@@ -11,14 +12,21 @@ const LayoutWrapper = styled.div`
 `;
 
 const App = () => {
-    
-    return(
-      <LayoutWrapper>
-        <Navigation />
-        <Main />
-        <Footer />
-      </LayoutWrapper>
-    )  
+  const [logged, setLogged] = useState(false);
+  const [nickname, setNickname] = useState('');
+
+  return (
+    <LayoutWrapper>
+      <Navigation 
+        isLogged={logged}/>
+      <Main 
+        logged={logged}
+        nickname={nickname}
+        setLogged={setLogged}
+        signIn={setNickname}/>
+      <Footer />
+    </LayoutWrapper>
+  )
 }
 
 export default App;

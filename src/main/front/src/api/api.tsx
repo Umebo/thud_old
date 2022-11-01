@@ -22,6 +22,8 @@ const LoginService = {
 	getNickname: () => requests.get('login')
 };
 
+//TODO: find separate place for custom hooks
+
 const useInput = (opts:any) => {
 	const [value, setValue] = useState('');
 	const input = <Input

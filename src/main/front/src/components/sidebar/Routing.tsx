@@ -1,17 +1,21 @@
-import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Main from '../Main';
-import Login from './Login';
+import Login from './panels/Login';
 
+interface RoutingProps {
+    signIn: (nickname: any) => any,
+    setLogged: (isLogged: boolean) => any
+}
 
-class Routing extends React.Component {
-    render() {
-        return(
-            <Routes>
-                <Route path='/login' element={<Login />}/>
-            </Routes>
-        )  
-    }
+const Routing = ({ signIn, setLogged }: RoutingProps) => {
+    return(
+        <Routes>
+            <Route path='/login' element={
+                <Login 
+                    signIn={ signIn }
+                    setLogged={ setLogged }/>
+            }/>
+        </Routes>
+    )  
 }
 
 export default Routing

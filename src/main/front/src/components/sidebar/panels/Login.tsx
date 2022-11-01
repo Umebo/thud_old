@@ -1,20 +1,25 @@
-import axios from 'axios';
-import React, {useState, useEffect} from 'react';
-import configData from "../../config.json";
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Card, CardHeader, Form, FormGroup, Input, Label } from 'reactstrap';
+import { Button, Card, Form, FormGroup } from 'reactstrap';
+import axios from 'axios';
 import styled from 'styled-components';
-import { LoginService, useInput } from '../../api/api';
+import configData from "../../../config.json";
+import { LoginService, useInput } from '../../../api/api';
 
 const LoginWrapper = styled.div`
     padding: 10px;
     text-align: center;
 `;
 
-const Login = () => {
+interface LoginProps {
+    signIn: (nickname: any) => any;
+    setLogged: (isLogged: boolean) => any;
+}
+
+const Login = ({ signIn, setLogged }: LoginProps) => {
     const navigate = useNavigate();
 
-    const [nickname, nicknameInput] = useInput({
+    const [input, setInput] = useInput({
         id: 'nickname_input',
         name: 'nickname',
         placeholder: 'Nickname'
@@ -24,21 +29,24 @@ const Login = () => {
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
-
-        // TO NIE DZIAŁA
+        
+        //FIXME: //TO NIE DZIAŁA
         // SPRAWDZIĆ JAK ZAIMPLEMENTOWAĆ API
         // LoginService.createNickname('test11');
 
         // TO DZIAŁA
         axios
-            .post('http://localhost:3000/login',{}, {
-                params: {nickname: nickname}
+            .post(configData.SERVER_URL + 'login',{}, {
+                params: {nickname: input}
             })
             .then((response) => {
                 setError(response.data);
-                navigate('/');
             })
             .catch((error) => console.log(error.message))
+
+        signIn(input)
+        setLogged(true)
+        navigate('/')
     }
 
     return (
@@ -46,7 +54,7 @@ const Login = () => {
             <LoginWrapper>
                 <Form onSubmit={(e) => handleSubmit(e)}>
                     <FormGroup>
-                        {nicknameInput}
+                        {setInput}
                     </FormGroup>
                     {' '}
                     <Button id='login_bt'>
