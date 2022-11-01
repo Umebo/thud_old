@@ -8,6 +8,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class Player {
+
+    public Player(String nickname) {
+        this.nickname = nickname;
+    }
+
     private String nickname;
     private PlayerType type;
 }

@@ -1,61 +1,49 @@
-html, body {
+* {
   margin:0;
   padding:0;
+}
+
+html, body, #root {
+  min-height: 100%;
   height: 100%;
+  overflow-x: hidden;
 }
 
 #root {
-  height: 100%;
-  width: 100%;
+  font-family: 'Rubik Mono One';
 }
 
-.App {
-  text-align: center;
-  display: inline-block;
-}
 
 /* ------------ NAVBAR ------------- */
 
 .navbar {
-  display: flex;
-  height: 6rem;
   text-decoration: none;
-  font-family: 'Rubik Mono One';
   background-color: #2C3639;
-  align-items: center;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
-.container-fluid {
-  display: flex;
-  width: 100%;
-}
-
-.navbar-brand {
-  padding-left: 3.5rem;
-  text-decoration: none;
-  font-size: 3.5rem;
+.navbar-brand, .navbar-brand:hover, .navbar-brand:visited {
+  font-size: 3rem;
+  padding-left: 1rem;
   color: #A27B5C;
-  justify-content: start;
-}
-
-.nav {
-  display: flex;
-  margin-left: auto;
-  list-style-type: none;
-  align-items: center;
-  justify-content: end;
-}
-
-.nav-item {
-  text-decoration: none;
-  font-size: larger;
-  padding-right: 3rem;
 }
 
 .nav-link {
+  font-size: large;
   color: #A27B5C;
-  text-decoration: none;
-  
 }
 
-/* --------------------------------- */
+/* --------- SIDEBAR CARDS --------- */
+
+.card {
+  background-color: #a27b5caf;
+  margin-bottom: 20px;
+}
+
+#nickname {
+  position: fixed;
+  right: 20px;
+  bottom: 30px;
+  /* margin-bottom: 0; */
+}
