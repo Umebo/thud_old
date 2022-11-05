@@ -1,12 +1,19 @@
-import { Button } from 'reactstrap';
 import DwarfIcon from './bread_color.png';
 import TrollIcon from './mace_color.png';
-import configData from '../../../config.json'
 import { useState } from 'react';
 import styled from 'styled-components';
 
+// TODO: show border on hover:
+//      &:hover {}
+
 const PieceWrapper = styled.button`
     background-color: transparent;
+    border: none;
+`;
+
+const IconWrapper = styled.img`
+    width: 100%;
+    height: 100%;
 `;
 
 enum PieceType {
@@ -21,16 +28,13 @@ interface IPiece {
 const Piece = ({type}: IPiece) => {
     const [startingTiles, setStartingTiles] = useState<string[]>([]);
 
-   /*  if (type == PieceType.Dwarf) {
-        setStartingTiles(configData.DWARF_STARTING_TILES)
-    } else if (type = PieceType.Troll)
-        setStartingTiles(configData.TROLL_STARTING_TILES) */
-
     return (
         <PieceWrapper>
-            {type == PieceType.Dwarf
-                ? <img src={DwarfIcon} style={{ 'width': '100%', 'height': '100%' }} />
-                : <img src={TrollIcon} style={{ 'width': '100%', 'height': '100%' }} />
+            {type == PieceType.Dwarf &&
+                <IconWrapper src={DwarfIcon} style={{ 'padding': '5px' }} />
+            }
+            {type == PieceType.Troll &&
+                <IconWrapper src={TrollIcon} />
             }
         </PieceWrapper>
     )
