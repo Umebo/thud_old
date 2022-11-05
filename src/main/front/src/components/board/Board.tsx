@@ -29,16 +29,19 @@ const Board = () => {
         for(let j = 0; j < rowLengths[i]; j++) {
             let tileColor = '#3F4E4F';
             if((verticalDim + i + j) % 2 !== 0) tileColor = '#2C3639';
+            const dimX = horizontalAxis[verticalDim + j]
+            const dimY = verticalAxis[i]
             row.push(
                     <Tile
+                        key={dimX+dimY}
                         tileColor={tileColor}
-                        dimX={horizontalAxis[verticalDim + j]} 
-                        dimY={verticalAxis[i]}
+                        dimX={dimX} 
+                        dimY={dimY}
                     />
                 );
         }
 
-        board.push(<RowStyle>{row}</RowStyle>);
+        board.push(<RowStyle key={i.toString()}>{row}</RowStyle>);
     }
 
     return (

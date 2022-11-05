@@ -1,6 +1,7 @@
 import styled from 'styled-components';
+import {Piece, PieceType} from './pieces/Piece';
 
-const TileWrapper = styled.div<TileProps>`
+const TileWrapper = styled.button<Pick<TileProps, 'tileColor'>>`
 width: 49px;
 height: 49px;
 margin: 2px;
@@ -11,16 +12,17 @@ color: white;
 `;
 
 interface TileProps {
-    dimX?: string,
-    dimY?: string,
+    dimX: string,
+    dimY: string,
     tileColor: string
 }
 
-const Tile = (props: TileProps) => {
+const Tile = ({dimX, dimY, tileColor}: TileProps) => {
 
     return(
-        <TileWrapper tileColor={props.tileColor}>
-            {/* {props.dimX}{props.dimY} */}
+        <TileWrapper id={dimX + dimY} tileColor={tileColor}>
+            {/* {dimX}{dimY} */}
+            <Piece type={PieceType.Dwarf}></Piece>
         </TileWrapper>
     ) 
 }
