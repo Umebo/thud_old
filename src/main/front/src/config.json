@@ -1,5 +1,6 @@
 {
     "SERVER_URL": "http://localhost:8080",
+    "SOCKET_URL": "http://localhost:8080/gameplay",
     "THEME_COLORS": {
         "PRIMARY": "#2C3639",
         "SECONDARY": "#3F4E4F",

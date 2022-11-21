@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import Login from './panels/Login';
+import NewGame from './panels/NewGame';
 
 interface RoutingProps {
     signIn: (nickname: any) => any,
@@ -13,6 +14,9 @@ const Routing = ({ signIn, setLogged }: RoutingProps) => {
                 <Login 
                     signIn={ signIn }
                     setLogged={ setLogged }/>
+            }/>
+            <Route path='/gameplay/new' element={
+                <NewGame />
             }/>
         </Routes>
     )  
