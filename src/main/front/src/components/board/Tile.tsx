@@ -27,7 +27,7 @@ const Tile = ({dimX, dimY, tileColor}: TileProps) => {
 
     return(
         <TileWrapper id={dimX + dimY} tileColor={tileColor}>
-            {dwarfTiles.includes(dimX+dimY) &&
+{/*             {dwarfTiles.includes(dimX+dimY) &&
                 <Piece type={PieceType.Dwarf}></Piece>
             }
             {trollTiles.includes(dimX+dimY) &&
@@ -35,7 +35,7 @@ const Tile = ({dimX, dimY, tileColor}: TileProps) => {
             }
             {thudStoneTile == dimX+dimY &&
                 <img src={ThudstoneIcon} style={{ 'width': '100%', 'height': '100%' }} />
-            }
+            } */}
         </TileWrapper>
     ) 
 }
