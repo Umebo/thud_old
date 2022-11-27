@@ -7,8 +7,11 @@ import styled from 'styled-components';
 //      &:hover {}
 
 const PieceWrapper = styled.button`
+    width: 49px;
+    height: 49px;
+    margin: 2px;
+    border-radius: 5px;
     background-color: transparent;
-    border: none;
 `;
 
 const IconWrapper = styled.img`
@@ -18,14 +21,15 @@ const IconWrapper = styled.img`
 
 enum PieceType {
     Dwarf,
-    Troll
+    Troll,
+    Empty
 }
 
-interface IPiece {
+interface PieceProps {
     type: PieceType
 }
 
-const Piece = ({type}: IPiece) => {
+const Piece = ({type}: PieceProps) => {
     const [startingTiles, setStartingTiles] = useState<string[]>([]);
 
     return (

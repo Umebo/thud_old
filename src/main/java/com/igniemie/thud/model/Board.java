@@ -6,7 +6,6 @@ import org.springframework.web.context.annotation.SessionScope;
 
 @Getter
 @Setter
-@SessionScope
 public class Board {
 
     private final int BOARD_SIZE = 15;
@@ -14,6 +13,11 @@ public class Board {
 
     public Board() {
         this.board = new int[BOARD_SIZE][BOARD_SIZE];
+
+    }
+
+    private void initializeNewGameSetup() {
+        
     }
 
 }

@@ -15,7 +15,6 @@ import java.util.UUID;
 @Setter
 @Getter
 @Component
-@SessionScope
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class GameplaySession {
 
@@ -27,11 +26,21 @@ public class GameplaySession {
     private Player player2;
     private GameStatus status;
 
-    public void createGame(Player player1) {
+    public GameplaySession(Player player) {
         this.gameUUID = UUID.randomUUID();
         this.round = Round.FIRST;
         this.board = new Board();
-        this.player1 = player1;
+        this.player1 = player;
+        this.player2 = null;
         this.status = GameStatus.NEW;
+    }
+
+    public void joinToGame(Player player) {
+        this.player2 = player;
+        this.setStatus(GameStatus.IN_PROGRESS);
+    }
+
+    public GameplayDTO toGameplayDTO() {
+        return new GameplayDTO(this.gameUUID.toString());
     }
 }

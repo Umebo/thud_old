@@ -3,7 +3,7 @@ import Nickname from './panels/Nickname';
 import Routing from './Routing';
 
 const SidebarWrapper = styled.div`
-    margin-left: auto;
+    margin-left: 855px;
     width: 400px;
     padding: 20px;
     flex: 1;
@@ -24,7 +24,8 @@ const Sidebar = ({ logged, nickname, setLogged, signIn }: SidebarProps) => {
         <SidebarWrapper>
             <Routing 
                 signIn={ signIn }
-                setLogged={ setLogged }/>
+                setLogged={ setLogged }
+                nickname={ nickname }/>
             <Nickname 
                 nickname={ nickname }
                 isLogged={ logged }/>

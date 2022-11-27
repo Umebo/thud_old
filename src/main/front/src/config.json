@@ -1,6 +1,7 @@
 {
     "SERVER_URL": "http://localhost:8080",
     "SOCKET_URL": "http://localhost:8080/gameplay",
+    "SOCKET_TOPIC": "/topic/app",
     "THEME_COLORS": {
         "PRIMARY": "#2C3639",
         "SECONDARY": "#3F4E4F",
@@ -15,6 +16,12 @@
         "BRIGHTER": "#3F4E4F",
         "BACKGROUND": "#DCD7C9"
     },
+
+    "BOARD_SIZE": 15,
+    "VERTICAL_AXIS": ["15", "14", "13", "12", "11", "10", "9",
+                    "8", "7", "6", "5", "4", "3", "2", "1"],
+    "HORIZONTAL_AXIS": ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O"],
+
     "DWARF_STARTING_TILES": 
         ["F15", "G15", "H15", "I15", "J15",
         "E14", "K14", "D13", "L13", "C12", "M12", "B11", "N11",
@@ -30,7 +37,6 @@
         "A13", "B13", "C13", "M13", "N13", "O13",
         "A12", "B12", "N12", "O12",
         "A11", "O11",
-        "H8",
         "A5", "O5",
         "A4", "B4", "N4", "O4",
         "A3", "B3", "C3", "M3", "N3", "O3",

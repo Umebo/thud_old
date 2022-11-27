@@ -3,11 +3,12 @@ import Login from './panels/Login';
 import NewGame from './panels/NewGame';
 
 interface RoutingProps {
+    nickname: string
     signIn: (nickname: any) => any,
     setLogged: (isLogged: boolean) => any
 }
 
-const Routing = ({ signIn, setLogged }: RoutingProps) => {
+const Routing = ({ nickname, signIn, setLogged }: RoutingProps) => {
     return(
         <Routes>
             <Route path='/login' element={
@@ -16,7 +17,8 @@ const Routing = ({ signIn, setLogged }: RoutingProps) => {
                     setLogged={ setLogged }/>
             }/>
             <Route path='/gameplay/new' element={
-                <NewGame />
+                <NewGame
+                    nickname={ nickname } />
             }/>
         </Routes>
     )  

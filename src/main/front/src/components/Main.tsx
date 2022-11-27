@@ -3,26 +3,36 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Board from './board/Board';
 import styled from 'styled-components';
-import configData from "../config.json";
+import cd from "../config.json";
 import Sidebar from './sidebar/Sidebar';
+import Gameplay from './gameplay/Gameplay';
+import { Route, Routes } from 'react-router-dom';
 
 const MainWrapper = styled.div`
     display: inline-flex;
     flex: 2 1 auto;
     padding-bottom: 30px;
-    background-color: ${configData.THEME_COLORS.BACKGROUND};
+    background-color: ${cd.THEME_COLORS.BACKGROUND};
 `;
 
+type GameType = {
+    UUID: string
+    status: string
+    player1: string
+    player2: string
+    board: string[]
+}
 interface MainProps {
     logged: boolean
     nickname: string
-    signIn: (nickname: any) => any,
+    signIn: (nickname: any) => any
     setLogged: (isLogged: boolean) => any
 }
 
 const Main = ({ logged, nickname, setLogged, signIn }: MainProps) => {
 
     const [response, getResponse] = useState([]);
+    const [gameplay, setGameplay] = useState<GameType>();
 
     useEffect(() => {
 
@@ -37,6 +47,15 @@ const Main = ({ logged, nickname, setLogged, signIn }: MainProps) => {
     return (
         <MainWrapper>
             <Board />
+            <Routes>
+                <Route path='/gameplay/test_path' element={
+                    <Gameplay
+                    uuid={ 'EFGH' }
+                    status={ 'NEW' }
+                    player1={ 'Test_3' }/>
+                }/>
+            </Routes>
+            
             <Sidebar
                 logged={logged}
                 nickname={nickname}
