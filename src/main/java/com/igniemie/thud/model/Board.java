@@ -82,7 +82,7 @@ public class Board {
         return letter.charAt(0) - 65;
     }
     private int intFromTileNumber(String tileNumber) {
-        return 15 - Integer.parseInt(tileNumber);
+        return BOARD_SIZE - Integer.parseInt(tileNumber);
     }
 
     public void makeMove(String from, String to) {
@@ -96,7 +96,7 @@ public class Board {
         this.board[coordinatesFrom.getLeft()][coordinatesFrom.getRight()] = destination;
     }
 
-    public Set<String> getAvailableMoves(String currentPosition) {
+    public Set<String> getDwarfAvailableMoves(String currentPosition) {
         List<Pair<Integer, Integer>> possibleMoves = new ArrayList<>();
         Pair<Integer, Integer> coordinates = mapTileSignatureToBoardCoordinates(currentPosition);
 
@@ -135,6 +135,38 @@ public class Board {
         for (int y = coordinates.getLeft()-1, x = coordinates.getRight()+1; x < BOARD_SIZE && y >= 0; x++, y--) {
             if (board[y][x] != 0) break;
             possibleMoves.add(Pair.of(y, x));
+        }
+
+        return possibleMoves.stream()
+                .map(this::mapBoardCoordinatesToTileSignature)
+                .collect(Collectors.toSet());
+    }
+
+    public Set<String> getTrollAvailableMoves(String currentPosition) {
+        List<Pair<Integer, Integer>> possibleMoves = new ArrayList<>();
+        Pair<Integer, Integer> coordinates = mapTileSignatureToBoardCoordinates(currentPosition);
+
+        int topBorder = -1;
+        int bottomBorder = 1;
+        int leftBorder = -1;
+        int rightBorder = 1;
+
+        if (coordinates.getLeft() == 0) {
+            topBorder = 0;
+        } else if (coordinates.getLeft() == 14) {
+            bottomBorder = 0;
+        } else if (coordinates.getRight() == 0) {
+            leftBorder = 0;
+        } else if (coordinates.getRight() == 14) {
+            rightBorder = 0;
+        }
+
+        for (int i = coordinates.getLeft() + topBorder; i <= coordinates.getLeft() + bottomBorder; i++) {
+            for (int j = coordinates.getRight() + leftBorder; j <= coordinates.getRight() + rightBorder; j++) {
+                if (board[i][j] == 0) {
+                    possibleMoves.add(Pair.of(i, j));
+                }
+            }
         }
 
         return possibleMoves.stream()

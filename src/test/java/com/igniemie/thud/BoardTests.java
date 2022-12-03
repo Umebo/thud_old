@@ -1,7 +1,6 @@
 package com.igniemie.thud;
 
 import com.igniemie.thud.model.Board;
-import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,11 +38,11 @@ public class BoardTests {
     }
 
     @Test
-    void shouldReturnProperAvailableMoves() {
+    void shouldReturnProperDwarfAvailableMoves() {
         board.makeMove("G15", "I13");
         board.makeMove("G9", "F10");
         board.makeMove("M12", "J12");
-        Set<String> availableMoves = Set.of(
+        Set<String> DwarfAvailableMoves = Set.of(
                 "G15",
                 "H14", "I14", "J14",
                 "E13", "F13", "G13", "H13", "J13", "K13",
@@ -52,6 +51,29 @@ public class BoardTests {
                 "I10"
         );
 
-        assertEquals(availableMoves, board.getAvailableMoves("I13"));
+        assertEquals(
+                DwarfAvailableMoves,
+                board.getDwarfAvailableMoves("I13"));
+    }
+
+    @Test
+    void shouldReturnProperTrollAvailableMoves() {
+        board.makeMove("G15", "E13");
+        board.makeMove("G9", "G15");
+        Set<String> FirstTrollAvailableMoves = Set.of(
+                "F14", "G14", "H14"
+        );
+        Set<String> SecondTrollAvailableMoves = Set.of(
+                "G10", "H10", "I10", "G9"
+        );
+
+        assertAll(
+                () -> assertEquals(
+                        FirstTrollAvailableMoves,
+                        board.getTrollAvailableMoves("G15")),
+                () -> assertEquals(
+                        SecondTrollAvailableMoves,
+                        board.getTrollAvailableMoves("H9"))
+        );
     }
 }
