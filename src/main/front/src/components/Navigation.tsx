@@ -19,17 +19,15 @@ const Navigation = ({ isLogged }: NavProps) => {
                 </NavItem>
                 {isLogged &&
                     <NavItem>
-                        <NavLink tag={Link} to="/">New game</NavLink>
+                        <NavLink tag={Link} to="/gameplay/new">New game</NavLink>
                     </NavItem>
-                }{isLogged &&
-                    <NavItem>
-                        <NavLink tag={Link} to="/logout">Logout</NavLink>
-                    </NavItem>
-                }{!isLogged &&
+                }
                 <NavItem>
-                    <NavLink tag={Link} to="/login">Login</NavLink>
-                </NavItem>
-                }           
+                    {!isLogged 
+                        ? <NavLink tag={Link} to="/login">Login</NavLink>
+                        : <NavLink tag={Link} to="/logout">Logout</NavLink>
+                    }
+                </NavItem>           
             </Nav>
         </Navbar>
     )

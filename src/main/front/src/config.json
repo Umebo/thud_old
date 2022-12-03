@@ -1,5 +1,7 @@
 {
     "SERVER_URL": "http://localhost:8080",
+    "SOCKET_URL": "http://localhost:8080/gameplay",
+    "SOCKET_TOPIC": "/topic/app",
     "THEME_COLORS": {
         "PRIMARY": "#2C3639",
         "SECONDARY": "#3F4E4F",
@@ -8,5 +10,36 @@
     },
     "SIDEBAR_COLORS": {
         "BACKGORUND": "#a27b5c96"
-    }
+    },
+    "TILES_COLORS": {
+        "DARKER": "#2C3639",
+        "BRIGHTER": "#3F4E4F",
+        "BACKGROUND": "#DCD7C9"
+    },
+
+    "BOARD_SIZE": 15,
+    "VERTICAL_AXIS": ["15", "14", "13", "12", "11", "10", "9",
+                    "8", "7", "6", "5", "4", "3", "2", "1"],
+    "HORIZONTAL_AXIS": ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O"],
+
+    "DWARF_STARTING_TILES": 
+        ["F15", "G15", "H15", "I15", "J15",
+        "E14", "K14", "D13", "L13", "C12", "M12", "B11", "N11",
+        "A10", "O10", "A9", "O9", "A8", "O8", "A7", "O7", "A6", "O6",
+        "B5", "N5", "C4", "M4", "D3", "L3", "E2", "K2",
+        "F1", "G1", "H1", "I1", "J1"],
+    "TROLL_STARTING_TILES":
+        ["G9", "H9", "I9", "G8", "I8", "G7", "H7", "I7"],
+    "THUDSTONE_TILE": "H8",
+    "OUT_OF_BOARD_TILES":
+        ["A15", "B15", "C15", "D15", "E15", "K15", "L15", "M15", "N15", "O15",
+        "A14", "B14", "C14", "D14", "L14", "M14", "N14", "O14",
+        "A13", "B13", "C13", "M13", "N13", "O13",
+        "A12", "B12", "N12", "O12",
+        "A11", "O11",
+        "A5", "O5",
+        "A4", "B4", "N4", "O4",
+        "A3", "B3", "C3", "M3", "N3", "O3",
+        "A2", "B2", "C2", "D2", "L2", "M2", "N2", "O2",
+        "A1", "B1", "C1", "D1", "E1", "K1", "L1", "M1", "N1", "O1"]
 }

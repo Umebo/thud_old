@@ -1,27 +1,23 @@
 import styled from 'styled-components';
 
-const TileWrapper = styled.div<TileProps>`
+const TileWrapper = styled.div<Pick<TileProps, 'tileColor'>>`
 width: 49px;
 height: 49px;
 margin: 2px;
 border-radius: 5px;
 background-color: ${(p) => p.tileColor};
-text-align: center;
-color: white;
 `;
 
 interface TileProps {
-    dimX?: string,
-    dimY?: string,
+    dimX: string,
+    dimY: string,
     tileColor: string
 }
 
-const Tile = (props: TileProps) => {
+const Tile = ({dimX, dimY, tileColor}: TileProps) => {
 
     return(
-        <TileWrapper tileColor={props.tileColor}>
-            {/* {props.dimX}{props.dimY} */}
-        </TileWrapper>
+        <TileWrapper id={dimX + dimY} tileColor={tileColor} />
     ) 
 }
 
