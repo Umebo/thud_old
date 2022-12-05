@@ -14,14 +14,6 @@ const MainWrapper = styled.div`
     padding-bottom: 30px;
     background-color: ${cd.THEME_COLORS.BACKGROUND};
 `;
-
-type GameType = {
-    UUID: string
-    status: string
-    player1: string
-    player2: string
-    board: string[]
-}
 interface MainProps {
     logged: boolean
     nickname: string
@@ -49,10 +41,7 @@ const Main = ({ logged, nickname, setLogged, signIn }: MainProps) => {
             <Board />
             <Routes>
                 <Route path='/gameplay/test_path' element={
-                    <Gameplay
-                    uuid={ 'EFGH' }
-                    status={ 'NEW' }
-                    player1={ 'Test_3' }/>
+                    <Gameplay />
                 }/>
             </Routes>
             

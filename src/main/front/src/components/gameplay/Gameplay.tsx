@@ -6,6 +6,8 @@ import cd from '../../config.json';
 import ThudstoneIcon from '../board/pieces/thudstone_color.png';
 import { Piece, PieceType } from '../board/pieces/Piece';
 import { Button } from 'reactstrap';
+import { useAppSelector, useAppDispatch } from '../../redux/Hooks';
+import { CREATE, JOIN } from './GameplaySlice'
 
 const GameplayWrapper = styled.div`
     position: absolute;
@@ -30,18 +32,11 @@ const EmptySpace = styled.div`
     background-color: transparent;
 `;
 
-interface GameplayProps {
-    uuid: string
-    status: string
-    player1: string
-    player2?: string
-}
-
-const Gameplay = ({
-    uuid, 
-    status, 
-    player1, 
-}: GameplayProps) => {
+const Gameplay = () => {
+    const uuid = useAppSelector((state) => state.gameplay.uuid)
+    const status = useAppSelector((state) => state.gameplay.status)
+    const player1 = useAppSelector((state) => state.gameplay.player1)
+    const dispatch = useAppDispatch()
 
     const board = [];
 

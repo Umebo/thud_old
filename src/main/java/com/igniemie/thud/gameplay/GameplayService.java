@@ -20,16 +20,21 @@ public class GameplayService {
         this.gameplayList = new ArrayList<>();
     }
 
-    public List<GameplayDTO> gameplayListAsDTO() {
-        return getGameplayList().stream()
+    public GameplayListDTO gameplayListAsDTO() {
+        GameplayListDTO gameplayList = new GameplayListDTO();
+        gameplayList.setGameplayDTOList(getGameplayList().stream()
                 .map(GameplaySession::toGameplayDTO)
-                .toList();
+                .toList());
+
+        return gameplayList;
     }
 
-    public GameplayDTO createNewGame(Player player) {
-        GameplaySession gameplaySession = new GameplaySession(player);
+    public GameplayDTO createNewGame(String nickname) {
+        Player player1 = new Player(nickname);
+        GameplaySession gameplaySession = new GameplaySession(player1);
+        GameplayDTO gameplayDTO = gameplaySession.toGameplayDTO();
         gameplayList.add(gameplaySession);
-        return gameplaySession.toGameplayDTO();
+        return gameplayDTO;
     }
 
     public void addPlayerToGame(UUID gameUUID, Player player) {

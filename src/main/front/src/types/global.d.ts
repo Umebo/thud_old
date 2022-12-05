@@ -10,7 +10,7 @@ declare global {
         UUID: string
         status: string
         player1: string
-        player2: string
-        board: string[]
+        player2?: string
+        board?: string[]
     }
 }
