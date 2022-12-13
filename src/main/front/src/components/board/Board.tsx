@@ -48,7 +48,7 @@ const generateTileColor = (row: number, col: number) => {
     if(cd.OUT_OF_BOARD_TILES.includes(tilePosition) || 
         cd.THUDSTONE_TILE === tilePosition) {
         return cd.TILES_COLORS.BACKGROUND
-    } else if((verticalDim + row + col) % 2 !== 0) {
+    } else if((row + col) % 2 !== 0) {
         return cd.TILES_COLORS.DARKER
     } else {
         return cd.TILES_COLORS.BRIGHTER
