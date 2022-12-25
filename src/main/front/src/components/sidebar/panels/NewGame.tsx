@@ -1,88 +1,85 @@
 import cd from '../../../config.json'
-import { useInput } from "../../../api/api";
 import axios from "axios";
 import styled from "styled-components"
-import { Button, Card, CardBody, CardHeader, List } from "reactstrap"
+import { Button, Card, CardBody, CardHeader, List, ListInlineItem } from "reactstrap"
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from '../../../redux/Hooks';
-import { CREATE } from '../../gameplay/GameplaySlice';
-import { unstable_useId } from '@mui/material';
+import { CREATE, JOIN } from '../../gameplay/GameplaySlice';
 
 const NewGameWrapper = styled.div`
     display: flex;
     flex-dirction: column;
 `;
 
-interface GameProps {
-    nickname: string
-}
-
-const NewGame = ({nickname}: GameProps) => {
-    const uuid = useAppSelector((state) => state.gameplay.uuid)
-    const dispatch = useAppDispatch();
-
-    const [gameList, setGameList] = useState<GameType[]>([]);
-
+const NewGame = () => {
     const navigate = useNavigate();
-    
+    const dispatch = useAppDispatch();
+    const nickname = useAppSelector((state) => state.login.nickname);
+
+    const [gameList, setGameList] = useState(new Map());
+
     useEffect(() => {
         getExistingGames();
         console.log(gameList);
     }, []);
 
     const getExistingGames = () => {
-    debugger
         axios
             .get(cd.SOCKET_URL + '/all', {})
             .then((response) => {
-                console.log(response.data);
-                console.log(response.data.gameplayDTOList?.[0]);
-                
-                const list: GameType[] = response.data.gameplayDTOList;
-                console.log(list);
-                
-                // setGameList(gameList => [...gameList, list])
-                console.log(gameList);
-                
+                setGameList(new Map(Object.entries(response.data)))
             })
             .catch((error) => console.log(error.message));
     }
     
     const createNewGame = () => {
         axios
-            .post(cd.SERVER_URL + '/gameplay/new',{
-                nickname: 'test'
-            })
+            .post(cd.SERVER_URL + '/gameplay/new', null, { params: {
+                    nickname: nickname
+                }})
             .then((response) => {
                 console.log(response.data);
-                const newGame: GameType = response.data;
-                console.log(newGame)
-                dispatch({ 
-                    type: CREATE, 
-                    uuid: response.data?.uuid,
-                    status: response.data?.status,
-                    player1: response.data?.player.nickname
-                })
+                dispatch(CREATE( {
+                    uuid: response.data.uuid,
+                    status: response.data.status,
+                    player1: response.data.player.nickname,
+                } ))
 
-/*                 let newGame: GameType[] = [
-                    response.data.uuid,
-                    response.data.status,
-                    response.data.player1
-                ]
-
-                setGameList(gameList.concat(newGame)); */
-                // navigate("/gameplay/" + response.data.uuid);
-                navigate("/gameplay/test_path");
+                navigate("/gameplay/" + response.data.uuid);
             })
             .catch((error) => console.log(error.message));
     }
 
-    const createButtonsFromGameList = (gameList: GameType[]) => {
-        if (!gameList.length) {
-            gameList.forEach((element: GameType) => {
-                return <Button> X </Button>
+    const joinToGame = (uuid: string) => {
+        axios
+            .put(cd.SERVER_URL + '/gameplay/join', null, { params: {
+                nickname: 'test_join',
+                uuid: uuid
+            }})
+            .then((response) => {
+                dispatch(JOIN( {
+                    uuid: uuid,
+                    status: 'IN_PROGRESS',
+                    player2: 'test_join'
+                }))
+                navigate("/gameplay/" + uuid);
+            })
+    }
+
+    const createButtonsFromGameList = (gameList: Map<string, string>) => {
+        if (gameList.size > 0) {
+            const games: any = []
+            gameList.forEach((player: string, uuid: string) => {
+                games.push(
+                    <li>
+                        <Button onClick={() => joinToGame(uuid)}> 
+                            {player} 
+                        </Button>
+                    </li>
+                )
             });
+            return games;
         }
         else {
             return <div>There is no active games</div>
@@ -97,10 +94,12 @@ const NewGame = ({nickname}: GameProps) => {
                 </Button>
             </Card>
             <Card>
-                <CardHeader>Join to existing game</CardHeader>
+                <CardHeader>
+                    Join to existing game
+                </CardHeader>
                 <CardBody>
                     <List>
-                        {/* { createButtonsFromGameList(gameList) } */}
+                        { createButtonsFromGameList(gameList) }
                     </List>
                 </CardBody>
             </Card>
@@ -109,33 +108,3 @@ const NewGame = ({nickname}: GameProps) => {
 }
 
 export default NewGame;
-
-/* const createNewGame = () => {
-    const navigate = useNavigate();
-    
-    axios
-        .post(cd.SERVER_URL + '/gameplay/new',{
-            nickname: 'test'
-        },{})
-        .then((response) => {
-            console.log(response.data);
-            // navigate("/gameplay/" + response.data.uuid);
-            navigate("/gameplay/test_path");
-        })
-        .catch((error) => console.log(error.message));
-} */
-
-const getExistingGames = () => {
-    let gameList: any = [];
-debugger
-    axios
-        .get(cd.SOCKET_URL + '/all', {})
-        .then((response) => {
-            console.log(response.data);
-            
-            gameList = response.data
-        })
-        .catch((error) => console.log(error.message));
-
-    return gameList;
-}

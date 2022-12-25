@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Nickname from './panels/Nickname';
+import Nickname from './panels/players/Nickname';
 import Routing from './Routing';
 
 const SidebarWrapper = styled.div`
@@ -11,24 +11,12 @@ const SidebarWrapper = styled.div`
     flex-direction: column;
 `;
 
-interface SidebarProps {
-    logged: boolean
-    nickname: string
-    setLogged: (isLogged: boolean) => any
-    signIn: (nickname: any) => any
-}
-
-const Sidebar = ({ logged, nickname, setLogged, signIn }: SidebarProps) => {
+const Sidebar = () => {
 
     return(
         <SidebarWrapper>
-            <Routing 
-                signIn={ signIn }
-                setLogged={ setLogged }
-                nickname={ nickname }/>
-            <Nickname 
-                nickname={ nickname }
-                isLogged={ logged }/>
+            <Routing />
+            <Nickname />
         </SidebarWrapper>
     )
 }

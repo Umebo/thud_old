@@ -12,18 +12,11 @@ const LayoutWrapper = styled.div`
 `;
 
 const App = () => {
-  const [logged, setLogged] = useState(false);
-  const [nickname, setNickname] = useState('');
 
   return (
     <LayoutWrapper>
-      <Navigation 
-        isLogged={logged}/>
-      <Main 
-        logged={logged}
-        nickname={nickname}
-        setLogged={setLogged}
-        signIn={setNickname}/>
+      <Navigation />
+      <Main />
       <Footer />
     </LayoutWrapper>
   )

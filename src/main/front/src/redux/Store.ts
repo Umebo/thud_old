@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import gameplayReducer from "../components/gameplay/GameplaySlice"
+import loginReducer from "../components/sidebar/panels/login/LoginSlice"
 
 export const store = configureStore({
     reducer: {
-        gameplay: gameplayReducer
+        gameplay: gameplayReducer,
+        login: loginReducer
     },
 })
 
