@@ -1,14 +1,16 @@
 package com.igniemie.thud.gameplay;
 
+import com.igniemie.thud.model.GameStatus;
 import com.igniemie.thud.model.Player;
+import com.igniemie.thud.model.PlayerType;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Getter
 @Service
@@ -21,12 +23,14 @@ public class GameplayService {
     }
 
     public GameplayListDTO gameplayListAsDTO() {
-        GameplayListDTO gameplayList = new GameplayListDTO();
-        gameplayList.setGameplayDTOList(getGameplayList().stream()
-                .map(GameplaySession::toGameplayDTO)
-                .toList());
+        GameplayListDTO gameplayDTOList = new GameplayListDTO();
+        gameplayDTOList.setGameplayDTOList(
+                gameplayList.stream()
+                    .filter(gameplaySession -> gameplaySession.getStatus().equals(GameStatus.NEW))
+                    .map(GameplaySession::toGameplayListEntity)
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
 
-        return gameplayList;
+        return gameplayDTOList;
     }
 
     public GameplayDTO createNewGame(String nickname) {
@@ -37,9 +41,18 @@ public class GameplayService {
         return gameplayDTO;
     }
 
-    public void addPlayerToGame(UUID gameUUID, Player player) {
-        this.gameplayList.stream()
-                .filter(gs -> gs.getGameUUID().equals(gameUUID))
-                .forEach(gs -> gs.joinToGame(player));
+    public GameplayDTO addPlayerToGame(String gameUUID, String nickname) {
+        Player player2 = new Player(nickname, PlayerType.TROLL);
+        for (GameplaySession gameSession: gameplayList) {
+            if (gameSession.getGameUUID().equals(UUID.fromString(gameUUID))) {
+                gameSession.joinToGame(player2);
+                return gameSession.toGameplayDTO();
+            }
+        }
+        return null;
     }
+
+/*    public GameplaySession findGameByUUID(String UUID) {
+
+    }*/
 }

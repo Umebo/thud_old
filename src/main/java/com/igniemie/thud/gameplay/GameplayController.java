@@ -1,6 +1,5 @@
 package com.igniemie.thud.gameplay;
 
-import com.igniemie.thud.model.Player;
 import com.igniemie.thud.session.PlayerSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,11 +13,14 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -43,19 +45,24 @@ public class GameplayController {
     }
 
     @GetMapping("/all")
-    public GameplayListDTO allGames() {
-        return gameplayService.gameplayListAsDTO();
+    public Map<String, String> allGames() {
+        return gameplayService.gameplayListAsDTO().getGameplayDTOList();
     }
+
+/*    @GetMapping("/{uuid}/moves")
+    public Set*/
 
     @PostMapping("/new")
-    public GameplayDTO newGame(@RequestBody Player player) {
-        return gameplayService.createNewGame(player.getNickname());
+    public GameplayDTO newGame(@RequestParam String nickname) {
+        return gameplayService.createNewGame(nickname);
     }
 
-    /*@PutMapping("/{gameUUID}/join")
-    public GameplayDTO jointToExistingGame(@PathVariable String gameUUID, String nickname) {
-        return
-    }*/
+    @PutMapping("/join")
+    public GameplayDTO jointToExistingGame(
+            @RequestParam String uuid,
+            @RequestParam String nickname) {
+        return gameplayService.addPlayerToGame(uuid, nickname);
+    }
 
     @PostMapping("/send")
     public ResponseEntity<Void> sendMessage(@RequestBody String message) {
@@ -63,7 +70,7 @@ public class GameplayController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @MessageMapping("/{gameUUID}/")
+    @MessageMapping("/{gameUUID}")
     public void receiveMessage(
             @DestinationVariable String gameUUID,
             @Payload String message,
