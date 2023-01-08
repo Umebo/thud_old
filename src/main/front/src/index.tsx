@@ -1,7 +1,9 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom'
+import { Provider } from 'react-redux'
 import './index.css';
+import { store } from './redux/Store'
 import App from './app/App';
 
 const root = ReactDOM.createRoot(
@@ -10,6 +12,8 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <BrowserRouter>
-    <App />
+    <Provider store={ store }>
+      <App />
+    </Provider>
   </BrowserRouter>
 );

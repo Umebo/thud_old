@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.igniemie.thud.model.Board;
 import com.igniemie.thud.model.GameStatus;
 import com.igniemie.thud.model.Player;
+import com.igniemie.thud.model.PlayerType;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ public class GameplaySession {
         this.round = Round.FIRST;
         this.board = new Board();
         this.player1 = player;
+        this.player1.setType(PlayerType.DWARF);
         this.player2 = null;
         this.status = GameStatus.NEW;
     }
@@ -41,6 +43,9 @@ public class GameplaySession {
     }
 
     public GameplayDTO toGameplayDTO() {
-        return new GameplayDTO(this.gameUUID.toString());
+        return new GameplayDTO(
+                this.gameUUID.toString(),
+                status.toString(),
+                player1);
     }
 }
