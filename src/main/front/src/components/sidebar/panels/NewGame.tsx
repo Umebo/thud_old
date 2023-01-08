@@ -54,17 +54,19 @@ const NewGame = () => {
     const joinToGame = (uuid: string) => {
         axios
             .put(cd.SERVER_URL + '/gameplay/join', null, { params: {
-                nickname: 'test_join',
+                nickname: nickname,
                 uuid: uuid
             }})
             .then((response) => {
                 dispatch(JOIN( {
                     uuid: uuid,
-                    status: 'IN_PROGRESS',
-                    player2: 'test_join'
+                    status: response.data.status,
+                    player1: nickname,
+                    player2: response.data.player1
                 }))
-                navigate("/gameplay/" + uuid);
             })
+        
+        navigate("/gameplay/" + uuid);
     }
 
     const createButtonsFromGameList = (gameList: Map<string, string>) => {

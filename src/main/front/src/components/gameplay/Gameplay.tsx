@@ -1,13 +1,11 @@
 import { Grid } from '@mui/material';
-import { useEffect } from 'react';
 import SockJsClient from 'react-stomp';
 import styled from 'styled-components';
 import cd from '../../config.json';
 import ThudstoneIcon from '../board/pieces/thudstone_color.png';
 import { Piece, PieceType } from '../board/pieces/Piece';
-import { Button } from 'reactstrap';
 import { useAppSelector, useAppDispatch } from '../../redux/Hooks';
-import { CREATE, JOIN } from './GameplaySlice'
+import { CREATE } from './GameplaySlice'
 
 const GameplayWrapper = styled.div`
     position: absolute;
@@ -36,6 +34,7 @@ const Gameplay = () => {
     const uuid = useAppSelector((state) => state.gameplay.uuid)
     const status = useAppSelector((state) => state.gameplay.status)
     const player1 = useAppSelector((state) => state.gameplay.player1)
+    const player2 = useAppSelector((state) => state.gameplay.player2)
     const dispatch = useAppDispatch()
 
     const board = [];
@@ -61,7 +60,7 @@ const Gameplay = () => {
             </Grid>
             <SockJsClient 
                     url={ cd.SOCKET_URL }
-                    topics={ [cd.SOCKET_TOPIC] }
+                    topics={ [cd.SOCKET_TOPIC + '/' + uuid] }
                     onConnect={ console.log({ player1 } + " connected!") }
                     onMessage={(msg: any) => onMessageReceived(msg)}
                     debug={ false }
