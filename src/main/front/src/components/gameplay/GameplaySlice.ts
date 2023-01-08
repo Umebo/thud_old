@@ -41,8 +41,15 @@ export const gameplaySlice = createSlice({
     }
 });
 
+export default gameplaySlice.reducer;
+
+// Actions
+
 export const { CREATE, JOIN } = gameplaySlice.actions;
 
-// export const selectGameplayUUID = (state: RootState) => state.gameplay.uuid
+//TODO: move axios actions here
 
-export default gameplaySlice.reducer;
+//e.g.
+// export const whatever = () => {
+
+// }
