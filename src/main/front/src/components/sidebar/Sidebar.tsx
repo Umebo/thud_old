@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Nickname from './panels/players/Nickname';
+import SecondPlayer from './panels/players/SecondPlayer';
 import Routing from './Routing';
 
 const SidebarWrapper = styled.div`
@@ -11,12 +12,19 @@ const SidebarWrapper = styled.div`
     flex-direction: column;
 `;
 
+const PlayersWrapper = styled.div`
+    margin-top: auto;
+`;
+
 const Sidebar = () => {
 
     return(
         <SidebarWrapper>
             <Routing />
-            <Nickname />
+            <PlayersWrapper>
+                <Nickname />
+                <SecondPlayer />
+            </PlayersWrapper>
         </SidebarWrapper>
     )
 }

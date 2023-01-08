@@ -1,10 +1,5 @@
 import { Card, CardBody, CardText } from "reactstrap";
-import styled from "styled-components";
 import { useAppSelector } from "../../../../redux/Hooks";
-
-const NicknameWrapper = styled.div`
-    margin-top: auto;
-`;
 
 const Nickname = () => {
     const nickname = useAppSelector((state) => state.login.nickname);
@@ -12,15 +7,13 @@ const Nickname = () => {
 
     if(isLogged) {
         return(
-            <NicknameWrapper>
-                <Card id="nickname">
-                    <CardBody>
-                        <CardText>
-                            Logged as: { nickname }
-                        </CardText>
-                    </CardBody>
-                </Card>
-            </NicknameWrapper>
+            <Card id="nickname">
+                <CardBody>
+                    <CardText>
+                        Logged as: { nickname }
+                    </CardText>
+                </CardBody>
+            </Card>
         );
     }
     return <></>
