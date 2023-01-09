@@ -11,7 +11,6 @@ const PieceWrapper = styled.button`
     height: 49px;
     margin: 2px;
     border-radius: 5px;
-    background-color: transparent;
 `;
 
 const IconWrapper = styled.img`
@@ -27,13 +26,23 @@ enum PieceType {
 
 interface PieceProps {
     type: PieceType
+    position: string
+    send: (position: string) => void
 }
 
-const Piece = ({type}: PieceProps) => {
-    const [startingTiles, setStartingTiles] = useState<string[]>([]);
+const Piece = ({type, position, send}: PieceProps) => {
+    const [active, setActive] = useState(false);
+
+    const activate = () => {
+        send(position);
+        setActive(!active);
+    }
 
     return (
-        <PieceWrapper>
+        <PieceWrapper
+            onClick={() => activate()}
+            style={{ backgroundColor: active ? 'red' : 'transparent' }}
+        >
             {type == PieceType.Dwarf &&
                 <IconWrapper src={DwarfIcon} style={{ 'padding': '5px' }} />
             }
