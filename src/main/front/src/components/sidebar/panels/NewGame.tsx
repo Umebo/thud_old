@@ -1,16 +1,10 @@
 import cd from '../../../config.json'
 import axios from "axios";
-import styled from "styled-components"
-import { Button, Card, CardBody, CardHeader, List, ListInlineItem } from "reactstrap"
+import { Button, Card, CardBody, CardHeader, List } from "reactstrap"
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from '../../../redux/Hooks';
 import { CREATE, JOIN } from '../../gameplay/GameplaySlice';
-
-const NewGameWrapper = styled.div`
-    display: flex;
-    flex-dirction: column;
-`;
 
 const NewGame = () => {
     const navigate = useNavigate();
@@ -74,7 +68,7 @@ const NewGame = () => {
             const games: any = []
             gameList.forEach((player: string, uuid: string) => {
                 games.push(
-                    <li>
+                    <li key={uuid}>
                         <Button onClick={() => joinToGame(uuid)}> 
                             {player} 
                         </Button>
