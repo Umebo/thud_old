@@ -1,7 +1,7 @@
 import { Grid } from '@mui/material';
 import styled from 'styled-components';
 import cd from '../../config.json';
-import ThudstoneIcon from '../board/pieces/thudstone_color.png';
+import ThudstoneIcon from '../board/pieces/static/thudstone_color.png';
 import { Piece, PieceType } from '../board/pieces/Piece';
 import { useAppSelector, useAppDispatch } from '../../redux/Hooks';
 import { useEffect } from 'react';

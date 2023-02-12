@@ -1,9 +1,9 @@
-import DwarfIcon from './bread_color.png';
-import TrollIcon from './mace_color.png';
+import DwarfIcon from './static/bread_color.png';
+import TrollIcon from './static/mace_color.png';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../../../redux/Hooks';
-import { CHOOSE_PIECE, CLEAR } from '../../board/pieces/PieceSlice';
+import { CHOOSE_PIECE, CLEAR } from './PieceSlice';
 
 // TODO: show border on hover:
 //      &:hover {}
