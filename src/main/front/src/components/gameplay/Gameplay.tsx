@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import cd from '../../config.json';
 import ThudstoneIcon from '../board/pieces/static/thudstone_color.png';
 import { Piece, PieceType } from '../board/pieces/Piece';
-import { useAppSelector, useAppDispatch } from '../../redux/Hooks';
 import { useEffect } from 'react';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
@@ -32,11 +31,6 @@ const EmptySpace = styled.div`
 `;
 
 const Gameplay = () => {
-    const uuid = useAppSelector((state) => state.gameplay.uuid)
-    const status = useAppSelector((state) => state.gameplay.status)
-    const player1 = useAppSelector((state) => state.gameplay.player1)
-    const player2 = useAppSelector((state) => state.gameplay.player2)
-    const dispatch = useAppDispatch()
 
     const board = [];
 
@@ -58,10 +52,38 @@ const Gameplay = () => {
     }
 
     const showTile = (position: string) => {
-        console.log("clicked!");
         stompClient.send('/app/message', {}, JSON.stringify(position));
     };
 
+    const initialPawnsSetup = (tilePositon: string) => {
+
+        if(cd.OUT_OF_BOARD_TILES.includes(tilePositon)) {
+            return <EmptySpace />
+        } else if(cd.DWARF_STARTING_TILES.includes(tilePositon)) {
+            return <Piece 
+                type={ PieceType.Dwarf }
+                position={tilePositon}
+                send={showTile}
+                key={tilePositon}
+                ></Piece>
+            } else if (cd.TROLL_STARTING_TILES.includes(tilePositon)) {
+                return <Piece 
+                type={ PieceType.Troll }
+                position={tilePositon}
+                send={showTile}
+                key={tilePositon}
+                ></Piece>
+            } else if (cd.THUDSTONE_TILE === tilePositon) {
+                return <ThudstoneWrapper key={tilePositon} src={ ThudstoneIcon }/>
+            } else {
+                return <Piece 
+                type={ PieceType.Empty }
+                position={tilePositon}
+                send={showTile}
+                key={tilePositon}
+            ></Piece>
+        }  
+    } 
 
     for(let i = 0; i < cd.BOARD_SIZE; i++) {
         for(let j = 0; j < cd.BOARD_SIZE; j++) {
@@ -71,11 +93,12 @@ const Gameplay = () => {
             board.push(
                 //TODO: get rid of styling in main function
                 <Grid item style={{'height': '53px'}} key={dimX+dimY} > 
-                    { initialPawnsSetup(dimX+dimY, showTile) } 
+                    { initialPawnsSetup(dimX+dimY) } 
                 </Grid>
             );
         }
     }
+    
 
     return(
             <GameplayWrapper>
@@ -86,7 +109,7 @@ const Gameplay = () => {
     )
 }
 
-const initialPawnsSetup = (tilePositon: string, activate: (position: string) => void) => {
+/* const initialPawnsSetup = (tilePositon: string, activate: showTile) => {
 
     if(cd.OUT_OF_BOARD_TILES.includes(tilePositon)) {
         return <EmptySpace />
@@ -114,6 +137,6 @@ const initialPawnsSetup = (tilePositon: string, activate: (position: string) => 
             key={tilePositon}
         ></Piece>
     }  
-} 
+}  */
 
 export default Gameplay;

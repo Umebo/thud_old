@@ -3,7 +3,7 @@ import TrollIcon from './static/mace_color.png';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useAppDispatch, useAppSelector } from '../../../redux/Hooks';
-import { CHOOSE_PIECE, CLEAR } from './PieceSlice';
+import { CHOOSE_PIECE, CLEAR, MOVE_DONE } from './PieceSlice';
 
 // TODO: show border on hover:
 //      &:hover {}
@@ -29,7 +29,7 @@ enum PieceType {
 interface PieceProps {
     type: PieceType
     position: string
-    send: (position: string) => void
+    send: Function
 }
 
 const Piece = ({type, position, send}: PieceProps) => {
@@ -56,8 +56,8 @@ const Piece = ({type, position, send}: PieceProps) => {
         else {
             //TODO: rest endpoint call for check if this move is available
             send(position + " + " + first)
-            //TODO: function for swaping pieces
             setCurrentType(PieceType.Dwarf)
+            dispatch(MOVE_DONE())
         }
     }
 
