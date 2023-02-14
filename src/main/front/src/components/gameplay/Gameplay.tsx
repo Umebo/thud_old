@@ -63,14 +63,14 @@ const Gameplay = () => {
             return <EmptySpace />
         } else if(cd.DWARF_STARTING_TILES.includes(tilePositon)) {
             return <Piece 
-                type={ PieceType.Dwarf }
+                initialType={ PieceType.Dwarf }
                 position={tilePositon}
                 send={showTile}
                 key={tilePositon}
                 ></Piece>
             } else if (cd.TROLL_STARTING_TILES.includes(tilePositon)) {
                 return <Piece 
-                type={ PieceType.Troll }
+                initialType={ PieceType.Troll }
                 position={tilePositon}
                 send={showTile}
                 key={tilePositon}
@@ -79,7 +79,7 @@ const Gameplay = () => {
                 return <ThudstoneWrapper key={tilePositon} src={ ThudstoneIcon }/>
             } else {
                 return <Piece 
-                type={ PieceType.Empty }
+                initialType={ PieceType.Empty }
                 position={tilePositon}
                 send={showTile}
                 key={tilePositon}

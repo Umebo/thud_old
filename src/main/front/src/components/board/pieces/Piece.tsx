@@ -5,7 +5,7 @@ import DwarfIcon from './static/bread_color.png';
 import TrollIcon from './static/mace_color.png';
 import cd from '../../../config.json';
 import { useAppDispatch, useAppSelector } from '../../../redux/Hooks';
-import { CHOOSE_PIECE, GET_MOVES, CLEAR } from './PieceSlice';
+import { CHOOSE_PIECE, GET_MOVES, CLEAR, MAKE_MOVE } from './PieceSlice';
 
 // TODO: show border on hover:
 //      &:hover {}
@@ -29,83 +29,77 @@ enum PieceType {
 }
 
 interface PieceProps {
-    type: PieceType
+    initialType: PieceType
     position: string
     send: Function
 }
 
-const Piece = ({ type, position, send }: PieceProps) => {
+const Piece = ({ initialType, position, send }: PieceProps) => {
     const [active, setActive] = useState(false);
-    const [currentType, setCurrentType] = useState(type);
+    const [currentType, setCurrentType] = useState(initialType);
 
-    const isPawnChosen = useAppSelector((state) => state.piece.isPawnChosen);
-    const chosenPieceType = useAppSelector((state) => state.piece.chosenPieceType);
-    const first = useAppSelector((state) => state.piece.chosenPiecePosition);
+    const isPawnChosen = useAppSelector(state => state.piece.isPawnChosen);
+    const chosenPieceType = useAppSelector(state => state.piece.chosenPieceType);
+    const chosenPiecePosition = useAppSelector(state => state.piece.chosenPiecePosition);
     const availableMoves = useAppSelector(state => state.piece.availableMoves);
+    const moveMadeFrom = useAppSelector(state => state.piece.moveMadeFrom)
     const dispatch = useAppDispatch();
     
 // ---------- Event listeners ---------- //
 
-// clear Empty tile if another chosen
-    // useEffect(() => {
-    //     if(!isPawnChosen && active) {
-    //         setActive(false)
-    //     }
-    // }, [isPawnChosen]);
-
-    useEffect(() => {
-        if(position === "O8"){
-            console.log(position + " change!");
-        }
-    }, [active]);
 
 // activate tiles which are current available destinations
     useEffect(() => {
         if(availableMoves.includes(position)) {
             setActive(true);
         }
-        if(availableMoves.length === 0 && position != first) {
+        if(availableMoves.length === 0 && position != chosenPiecePosition) {
             setActive(false)
         }
     }, [availableMoves]);
+
+// change initial piece type to Empty
+    useEffect(() => {
+        if(position === moveMadeFrom) {
+            setCurrentType(PieceType.Empty)
+        }
+    }, [moveMadeFrom]);
 
 // ------------------------------------- //
 
     const activate = () => {
         dispatch(CHOOSE_PIECE({
             piecePosition: position,
-            pieceType: type
+            pieceType: currentType
         }))
-        if(type !== PieceType.Empty) {
+        if(currentType !== PieceType.Empty) {
             getAvailableMoves();
         }
         setActive(true);
     }
 
-    //FIXME: change for more meaningful name
     const choosePiece = () => {
         if(!isPawnChosen) {
             activate();
         }
-        //TODO: second piece chosen
         else {
-            if(position === first) {
+            if(position === chosenPiecePosition) {
                 dispatch(CLEAR());
             }
             else if(!availableMoves.includes(position)) {
                 dispatch(CLEAR());
                 activate();
             }
-            // else {
-            //     send(JSON.stringify({
-            //         from: first,
-            //         to: position,
-            //         pieceType: type.toString
-            //     }))
-            //     setCurrentType(chosenPieceType)
-            //     dispatch(MOVE_DONE())
-            //     dispatch(CLEAR())
-            // }
+            else {
+                send(JSON.stringify({
+                    from: chosenPiecePosition,
+                    to: position,
+                    pieceType: currentType.toString
+                }))
+                setCurrentType(chosenPieceType);
+                dispatch(MAKE_MOVE())
+                dispatch(CLEAR())
+            }
         }
     }
 
@@ -113,7 +107,7 @@ const Piece = ({ type, position, send }: PieceProps) => {
         axios
             .get(cd.SERVER_URL + '/movement/all', { params: {
                     position: position,
-                    pieceType: type
+                    pieceType: currentType
                 }})
             .then((response) => {
                 dispatch(GET_MOVES({
@@ -128,10 +122,10 @@ const Piece = ({ type, position, send }: PieceProps) => {
             onClick={() => choosePiece()}
             style={{ backgroundColor: active ? 'red' : 'transparent' }}
         >
-            {type === PieceType.Dwarf &&
+            {currentType === PieceType.Dwarf &&
                 <IconWrapper src={DwarfIcon} style={{ 'padding': '5px' }} />
             }
-            {type === PieceType.Troll &&
+            {currentType === PieceType.Troll &&
                 <IconWrapper src={TrollIcon} />
             }
         </PieceWrapper>

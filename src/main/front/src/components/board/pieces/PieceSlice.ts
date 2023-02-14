@@ -4,15 +4,18 @@ import { PieceType } from "./Piece"
 interface PieceState {
     isPawnChosen: boolean
     chosenPiecePosition: string
-    chosenPieceType: PieceType | undefined
+    chosenPieceType: PieceType
     availableMoves: string[]
+    moveMadeFrom: string
 }
 
 const initialState: PieceState = {
     isPawnChosen: false,
     chosenPiecePosition: "",
-    chosenPieceType: undefined,
-    availableMoves: []
+    //FIXME: probably not the best solution
+    chosenPieceType: PieceType.Empty,
+    availableMoves: [],
+    moveMadeFrom: ""
 }
 
 export const pieceSlice = createSlice({
@@ -36,9 +39,12 @@ export const pieceSlice = createSlice({
             state.isPawnChosen = false
             state.chosenPiecePosition = ""
             state.availableMoves = []
+        },
+        MAKE_MOVE: (state) => {
+            state.moveMadeFrom = state.chosenPiecePosition
         }
     }
 });
 
-export const { CHOOSE_PIECE, GET_MOVES, CLEAR } = pieceSlice.actions;
+export const { CHOOSE_PIECE, GET_MOVES, CLEAR, MAKE_MOVE } = pieceSlice.actions;
 export default pieceSlice.reducer;
