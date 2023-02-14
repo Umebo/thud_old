@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -96,7 +97,21 @@ public class Board {
         this.board[coordinatesFrom.getLeft()][coordinatesFrom.getRight()] = destination;
     }
 
-    public Set<String> getDwarfAvailableMoves(String currentPosition) {
+    public Set<String> getAvailableMoves(String currentPosition, String pieceType) {
+        switch (pieceType) {
+            case "Dwarf" -> {
+                return getDwarfAvailableMoves(currentPosition);
+            }
+            case "Troll" -> {
+                return getTrollAvailableMoves(currentPosition);
+            }
+            default -> {
+                return Collections.emptySet();
+            }
+        }
+    }
+
+    private Set<String> getDwarfAvailableMoves(String currentPosition) {
         List<Pair<Integer, Integer>> possibleMoves = new ArrayList<>();
         Pair<Integer, Integer> coordinates = mapTileSignatureToBoardCoordinates(currentPosition);
 
@@ -142,7 +157,7 @@ public class Board {
                 .collect(Collectors.toSet());
     }
 
-    public Set<String> getTrollAvailableMoves(String currentPosition) {
+    private Set<String> getTrollAvailableMoves(String currentPosition) {
         List<Pair<Integer, Integer>> possibleMoves = new ArrayList<>();
         Pair<Integer, Integer> coordinates = mapTileSignatureToBoardCoordinates(currentPosition);
 

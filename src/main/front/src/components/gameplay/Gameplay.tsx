@@ -1,11 +1,11 @@
 import { Grid } from '@mui/material';
+import { Stomp } from '@stomp/stompjs';
+import { useEffect } from 'react';
+import SockJS from 'sockjs-client';
 import styled from 'styled-components';
 import cd from '../../config.json';
 import ThudstoneIcon from '../board/pieces/static/thudstone_color.png';
 import { Piece, PieceType } from '../board/pieces/Piece';
-import { useEffect } from 'react';
-import SockJS from 'sockjs-client';
-import { Stomp } from '@stomp/stompjs';
 
 const GameplayWrapper = styled.div`
     position: absolute;
@@ -45,14 +45,16 @@ const Gameplay = () => {
         stompClient = Stomp.over(socket)
         stompClient.connect({}, function(frame: any) {
             console.log('Connected: ' + frame);
-            stompClient.subscribe('/topic/mss', function(messageOutput: { body: any; }) {
-                console.log(messageOutput.body);
-            });
+            stompClient.subscribe('/topic/mss', onMessage);
         });
     }
 
+    const onMessage = (message: any) => {
+        console.log(message.body);
+    }
+
     const showTile = (position: string) => {
-        stompClient.send('/app/message', {}, JSON.stringify(position));
+        stompClient.send('/app/message', {}, position);
     };
 
     const initialPawnsSetup = (tilePositon: string) => {

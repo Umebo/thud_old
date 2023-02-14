@@ -1,13 +1,16 @@
-package com.igniemie.thud.gameplay;
+package com.igniemie.thud.movement;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class PawnMoveDTO {
     private String from;
     private String to;
+    private String pieceType;
 }

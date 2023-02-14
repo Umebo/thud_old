@@ -1,15 +1,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { PieceType } from "./Piece"
 
 interface PieceState {
     isPawnChosen: boolean
     chosenPiecePosition: string
-    isMoveDone: boolean
+    chosenPieceType: PieceType | undefined
+    availableMoves: string[]
 }
 
 const initialState: PieceState = {
     isPawnChosen: false,
     chosenPiecePosition: "",
-    isMoveDone: false,
+    chosenPieceType: undefined,
+    availableMoves: []
 }
 
 export const pieceSlice = createSlice({
@@ -17,21 +20,25 @@ export const pieceSlice = createSlice({
     initialState,
     reducers: {
         CHOOSE_PIECE: (state, action: PayloadAction<{ 
-            piecePosition: string 
+            piecePosition: string,
+            pieceType: PieceType,
         }>) => {
             state.isPawnChosen = true
             state.chosenPiecePosition = action.payload.piecePosition
+            state.chosenPieceType = action.payload.pieceType
         },
-        MOVE_DONE: (state) => {
-            state.isMoveDone = true
+        GET_MOVES: (state, action: PayloadAction<{ 
+            availableMoves: string[]
+        }>) => {
+            state.availableMoves = action.payload.availableMoves
         },
         CLEAR: (state) => {
             state.isPawnChosen = false
             state.chosenPiecePosition = ""
-            state.isMoveDone = false
+            state.availableMoves = []
         }
     }
 });
 
-export const { CHOOSE_PIECE, CLEAR, MOVE_DONE } = pieceSlice.actions;
+export const { CHOOSE_PIECE, GET_MOVES, CLEAR } = pieceSlice.actions;
 export default pieceSlice.reducer;
