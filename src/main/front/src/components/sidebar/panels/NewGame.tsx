@@ -20,7 +20,7 @@ const NewGame = () => {
 
     const getExistingGames = () => {
         axios
-            .get(cd.SOCKET_URL + '/all', {})
+            .get(cd.GAMEPLAY_URL + '/all', {})
             .then((response) => {
                 setGameList(new Map(Object.entries(response.data)))
             })
@@ -29,7 +29,7 @@ const NewGame = () => {
     
     const createNewGame = () => {
         axios
-            .post(cd.SERVER_URL + '/gameplay/new', null, { params: {
+            .post(cd.GAMEPLAY_URL + '/new', null, { params: {
                     nickname: nickname
                 }})
             .then((response) => {
@@ -47,7 +47,7 @@ const NewGame = () => {
 
     const joinToGame = (uuid: string) => {
         axios
-            .put(cd.SERVER_URL + '/gameplay/join', null, { params: {
+            .put(cd.GAMEPLAY_URL + '/join', null, { params: {
                 nickname: nickname,
                 uuid: uuid
             }})

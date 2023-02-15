@@ -41,7 +41,7 @@ const Gameplay = () => {
     }, []);
 
     const connect = () => {
-        var socket = new SockJS('/gameplay');
+        var socket = new SockJS('/movement');
         stompClient = Stomp.over(socket)
         stompClient.connect({}, function(frame: any) {
             console.log('Connected: ' + frame);

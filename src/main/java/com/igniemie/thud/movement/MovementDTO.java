@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PawnMoveDTO {
+public class MovementDTO {
     private String from;
     private String to;
     private String pieceType;
