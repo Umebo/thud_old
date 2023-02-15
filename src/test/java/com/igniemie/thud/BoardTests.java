@@ -53,7 +53,7 @@ public class BoardTests {
 
         assertEquals(
                 DwarfAvailableMoves,
-                board.getDwarfAvailableMoves("I13"));
+                board.getAvailableMoves("I13", "Dwarf"));
     }
 
     @Test
@@ -70,10 +70,10 @@ public class BoardTests {
         assertAll(
                 () -> assertEquals(
                         FirstTrollAvailableMoves,
-                        board.getTrollAvailableMoves("G15")),
+                        board.getAvailableMoves("G15", "Troll")),
                 () -> assertEquals(
                         SecondTrollAvailableMoves,
-                        board.getTrollAvailableMoves("H9"))
+                        board.getAvailableMoves("H9", "Troll"))
         );
     }
 }

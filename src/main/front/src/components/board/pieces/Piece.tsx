@@ -1,9 +1,11 @@
+import axios from 'axios';
+import styled from 'styled-components';
+import { useEffect, useState } from 'react';
 import DwarfIcon from './static/bread_color.png';
 import TrollIcon from './static/mace_color.png';
-import { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import cd from '../../../config.json';
 import { useAppDispatch, useAppSelector } from '../../../redux/Hooks';
-import { CHOOSE_PIECE, CLEAR, MOVE_DONE } from './PieceSlice';
+import { CHOOSE_PIECE, GET_MOVES, CLEAR, MAKE_MOVE } from './PieceSlice';
 
 // TODO: show border on hover:
 //      &:hover {}
@@ -21,63 +23,108 @@ const IconWrapper = styled.img`
 `;
 
 enum PieceType {
-    Dwarf,
-    Troll,
-    Empty
+    Dwarf = "Dwarf",
+    Troll = "Troll",
+    Empty = ""
 }
 
 interface PieceProps {
-    type: PieceType
+    initialType: PieceType
     position: string
     send: Function
 }
 
-const Piece = ({type, position, send}: PieceProps) => {
+const Piece = ({ initialType, position, send }: PieceProps) => {
     const [active, setActive] = useState(false);
-    const [currentType, setCurrentType] = useState(type);
+    const [currentType, setCurrentType] = useState(initialType);
 
-    const isPawnChosen = useAppSelector((state) => state.piece.isPawnChosen);
-    const first = useAppSelector((state) => state.piece.chosenPiecePosition);
-    const isMoveDone = useAppSelector((state) => state.piece.isMoveDone);
+    const isPawnChosen = useAppSelector(state => state.piece.isPawnChosen);
+    const chosenPieceType = useAppSelector(state => state.piece.chosenPieceType);
+    const chosenPiecePosition = useAppSelector(state => state.piece.chosenPiecePosition);
+    const availableMoves = useAppSelector(state => state.piece.availableMoves);
+    const moveMadeFrom = useAppSelector(state => state.piece.moveMadeFrom)
     const dispatch = useAppDispatch();
+    
+// ---------- Event listeners ---------- //
 
-    //FIXME: change for more meaningful name
-    const activate = () => {
-        if(!isPawnChosen) {
-            dispatch(CHOOSE_PIECE({
-                piecePosition: position
-            }))
-            setActive(!active);
+
+// activate tiles which are current available destinations
+    useEffect(() => {
+        if(availableMoves.includes(position)) {
+            setActive(true);
         }
-        else if(position === first) {
-            dispatch(CLEAR())
-            setActive(!active);
+        if(availableMoves.length === 0 && position != chosenPiecePosition) {
+            setActive(false)
+        }
+    }, [availableMoves]);
+
+// change initial piece type to Empty
+    useEffect(() => {
+        if(position === moveMadeFrom) {
+            setCurrentType(PieceType.Empty)
+        }
+    }, [moveMadeFrom]);
+
+// ------------------------------------- //
+
+    const activate = () => {
+        dispatch(CHOOSE_PIECE({
+            piecePosition: position,
+            pieceType: currentType
+        }))
+        if(currentType !== PieceType.Empty) {
+            getAvailableMoves();
+        }
+        setActive(true);
+    }
+
+    const choosePiece = () => {
+        if(!isPawnChosen) {
+            activate();
         }
         else {
-            //TODO: rest endpoint call for check if this move is available
-            send(position + " + " + first)
-            setCurrentType(PieceType.Dwarf)
-            dispatch(MOVE_DONE())
+            if(position === chosenPiecePosition) {
+                dispatch(CLEAR());
+            }
+            else if(!availableMoves.includes(position)) {
+                dispatch(CLEAR());
+                activate();
+            }
+            else {
+                send(JSON.stringify({
+                    from: chosenPiecePosition,
+                    to: position,
+                }))
+                setCurrentType(chosenPieceType);
+                dispatch(MAKE_MOVE())
+                dispatch(CLEAR())
+            }
         }
     }
 
-    useEffect(() => {
-        if(first === position) {
-            setActive(!active);
-            setCurrentType(PieceType.Empty)
-            dispatch(CLEAR())
-        }
-    }, [isMoveDone]);
+    const getAvailableMoves = () => {
+        axios
+            .get(cd.SERVER_URL + '/movement/all', { params: {
+                    position: position,
+                    pieceType: currentType
+                }})
+            .then((response) => {
+                dispatch(GET_MOVES({
+                    availableMoves: response.data
+                }))
+            })
+            .catch((error) => console.log(error.message));
+    }
 
     return (
         <PieceWrapper id={position}
-            onClick={() => activate()}
-            style={{ backgroundColor: active ? 'red' : 'transparent' }}
+            onClick={() => choosePiece()}
+            style={{ backgroundColor: active ? 'rgba(255, 99, 71, 0.4)' : 'transparent' }}
         >
-            {currentType == PieceType.Dwarf &&
+            {currentType === PieceType.Dwarf &&
                 <IconWrapper src={DwarfIcon} style={{ 'padding': '5px' }} />
             }
-            {currentType == PieceType.Troll &&
+            {currentType === PieceType.Troll &&
                 <IconWrapper src={TrollIcon} />
             }
         </PieceWrapper>

@@ -49,14 +49,4 @@ public class GameplayController {
         return gameplayService.addPlayerToGame(uuid, nickname);
     }
 
-    @MessageMapping("/message")
-    @SendTo("/topic/mss")
-    public String receiveMessage(String position) {
-        return position;
-    }
-
-    public String send(@Payload String message){
-        return message;
-    }
-
 }

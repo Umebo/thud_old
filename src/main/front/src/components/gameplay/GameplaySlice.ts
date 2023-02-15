@@ -3,15 +3,15 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 interface GameplayState {
     uuid: string,
     status: string,
-    player1: string,
-    player2?: string,
+    dwarfPlayer: string,
+    trollPlayer?: string,
 }
 
 const initialState: GameplayState = {
     uuid: "",
     status: "",
-    player1: "",
-    player2: undefined
+    dwarfPlayer: "",
+    trollPlayer: undefined
 }
 
 export const gameplaySlice = createSlice({
@@ -21,22 +21,22 @@ export const gameplaySlice = createSlice({
         CREATE: (state, action: PayloadAction<{ 
             uuid: string, 
             status: string,
-            player1: string 
+            nickname: string 
         }>) => {
             state.uuid = action.payload.uuid
             state.status = action.payload.status
-            state.player1 = action.payload.player1
+            state.dwarfPlayer = action.payload.nickname
         },
         JOIN: (state, action: PayloadAction<{ 
             uuid: string, 
             status: string,
-            player1: string,
-            player2: string 
+            firstPlayer: string,
+            secondPlayer: string 
         }>) => {
             state.uuid = action.payload.uuid
             state.status = action.payload.status
-            state.player1 = action.payload.player1
-            state.player2 = action.payload.player2
+            state.dwarfPlayer = action.payload.firstPlayer
+            state.trollPlayer = action.payload.secondPlayer
         }
     }
 });

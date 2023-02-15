@@ -3,7 +3,7 @@ import { useAppSelector } from "../../../../redux/Hooks";
 
 const SecondPlayer = () => {
     const gameStatus = useAppSelector((state) => state.gameplay.status);
-    const secondPlayer = useAppSelector((state) => state.gameplay.player2);
+    const secondPlayer = useAppSelector((state) => state.gameplay.trollPlayer);
 
     if(gameStatus === "IN_PROGRESS") {
         return(
