@@ -4,4 +4,5 @@ import java.util.Set;
 
 public interface IMovementService {
     Set<String> getAvailableMoves(String position, String pieceType);
+    void makeMove(MovementDTO movementDTO);
 }

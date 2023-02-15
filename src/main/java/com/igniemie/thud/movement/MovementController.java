@@ -24,8 +24,8 @@ public class MovementController {
 
     @MessageMapping("/message")
     @SendTo("/topic/mss")
-    public String receiveMessage(String position) {
-        System.out.println("receive");
-        return position;
+    public MovementDTO receiveMessage(@RequestParam MovementDTO movementDTO) {
+        movementService.makeMove(movementDTO);
+        return movementDTO;
     }
 }

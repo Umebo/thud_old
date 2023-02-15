@@ -16,4 +16,9 @@ public class ClassicThudMovementService implements IMovementService{
     public Set<String> getAvailableMoves(String position, String pieceType) {
         return gameplaySession.getBoard().getAvailableMoves(position, pieceType);
     }
+
+    @Override
+    public void makeMove(MovementDTO movementDTO) {
+        gameplaySession.getBoard().makeMove(movementDTO.getFrom(), movementDTO.getTo());
+    }
 }

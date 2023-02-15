@@ -94,7 +94,6 @@ const Piece = ({ initialType, position, send }: PieceProps) => {
                 send(JSON.stringify({
                     from: chosenPiecePosition,
                     to: position,
-                    pieceType: currentType.toString
                 }))
                 setCurrentType(chosenPieceType);
                 dispatch(MAKE_MOVE())
@@ -120,7 +119,7 @@ const Piece = ({ initialType, position, send }: PieceProps) => {
     return (
         <PieceWrapper id={position}
             onClick={() => choosePiece()}
-            style={{ backgroundColor: active ? 'red' : 'transparent' }}
+            style={{ backgroundColor: active ? 'rgba(255, 99, 71, 0.4)' : 'transparent' }}
         >
             {currentType === PieceType.Dwarf &&
                 <IconWrapper src={DwarfIcon} style={{ 'padding': '5px' }} />

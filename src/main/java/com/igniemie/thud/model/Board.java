@@ -91,10 +91,9 @@ public class Board {
         Pair<Integer, Integer> coordinatesTo = mapTileSignatureToBoardCoordinates(to);
 
         int source = this.board[coordinatesFrom.getLeft()][coordinatesFrom.getRight()];
-        int destination = this.board[coordinatesTo.getLeft()][coordinatesTo.getRight()];
 
         this.board[coordinatesTo.getLeft()][coordinatesTo.getRight()] = source;
-        this.board[coordinatesFrom.getLeft()][coordinatesFrom.getRight()] = destination;
+        this.board[coordinatesFrom.getLeft()][coordinatesFrom.getRight()] = 0;
     }
 
     public Set<String> getAvailableMoves(String currentPosition, String pieceType) {

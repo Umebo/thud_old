@@ -12,5 +12,4 @@ import lombok.Setter;
 public class MovementDTO {
     private String from;
     private String to;
-    private String pieceType;
 }
