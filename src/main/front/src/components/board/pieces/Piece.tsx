@@ -22,27 +22,26 @@ const IconWrapper = styled.img`
     height: 100%;
 `;
 
-enum PieceType {
-    Dwarf = "Dwarf",
-    Troll = "Troll",
-    Empty = ""
-}
 
 interface PieceProps {
-    initialType: PieceType
+    initialType: string
     position: string
     send: Function
 }
 
 const Piece = ({ initialType, position, send }: PieceProps) => {
-    const [active, setActive] = useState(false);
-    const [currentType, setCurrentType] = useState(initialType);
+    const [active, setActive] = useState<boolean>(false);
+    const [currentType, setCurrentType] = useState<string>(initialType);
 
     const isPawnChosen = useAppSelector(state => state.piece.isPawnChosen);
     const chosenPieceType = useAppSelector(state => state.piece.chosenPieceType);
     const chosenPiecePosition = useAppSelector(state => state.piece.chosenPiecePosition);
     const availableMoves = useAppSelector(state => state.piece.availableMoves);
     const moveMadeFrom = useAppSelector(state => state.piece.moveMadeFrom)
+    const receivedMovedPieceSource = useAppSelector(state => state.piece.receivedMovedPieceSource)
+    const receivedMovedPieceDestination = useAppSelector(state => state.piece.receivedMovedPieceDestination)
+    const receivedMovedPieceType = useAppSelector(state => state.piece.receivedMovedPieceType)
+    const MyFraction = useAppSelector(state => state.gameplay.myFraction)
     const dispatch = useAppDispatch();
     
 // ---------- Event listeners ---------- //
@@ -53,7 +52,7 @@ const Piece = ({ initialType, position, send }: PieceProps) => {
         if(availableMoves.includes(position)) {
             setActive(true);
         }
-        if(availableMoves.length === 0 && position != chosenPiecePosition) {
+        if(availableMoves.length === 0 && position !== chosenPiecePosition) {
             setActive(false)
         }
     }, [availableMoves]);
@@ -61,9 +60,21 @@ const Piece = ({ initialType, position, send }: PieceProps) => {
 // change initial piece type to Empty
     useEffect(() => {
         if(position === moveMadeFrom) {
-            setCurrentType(PieceType.Empty)
+            setCurrentType("Empty")
         }
     }, [moveMadeFrom]);
+
+// change board state after other player move
+    useEffect(() => {
+        if(receivedMovedPieceType !== MyFraction) {
+            if(position === receivedMovedPieceSource) {
+                setCurrentType("Empty");
+            } 
+            else if(position === receivedMovedPieceDestination) {
+                setCurrentType(receivedMovedPieceType);
+            }
+        }
+    }, [receivedMovedPieceType]);
 
 // ------------------------------------- //
 
@@ -72,10 +83,21 @@ const Piece = ({ initialType, position, send }: PieceProps) => {
             piecePosition: position,
             pieceType: currentType
         }))
-        if(currentType !== PieceType.Empty) {
+        if(currentType !== "Empty" && currentType === MyFraction) {
             getAvailableMoves();
         }
         setActive(true);
+    }
+
+    const makeMove = () => {
+        send(JSON.stringify({
+            from: chosenPiecePosition,
+            to: position,
+            type: chosenPieceType
+        }))
+        setCurrentType(chosenPieceType);
+        dispatch(MAKE_MOVE())
+        dispatch(CLEAR())
     }
 
     const choosePiece = () => {
@@ -91,13 +113,7 @@ const Piece = ({ initialType, position, send }: PieceProps) => {
                 activate();
             }
             else {
-                send(JSON.stringify({
-                    from: chosenPiecePosition,
-                    to: position,
-                }))
-                setCurrentType(chosenPieceType);
-                dispatch(MAKE_MOVE())
-                dispatch(CLEAR())
+                makeMove()
             }
         }
     }
@@ -121,14 +137,14 @@ const Piece = ({ initialType, position, send }: PieceProps) => {
             onClick={() => choosePiece()}
             style={{ backgroundColor: active ? 'rgba(255, 99, 71, 0.4)' : 'transparent' }}
         >
-            {currentType === PieceType.Dwarf &&
+            {currentType === "Dwarf" &&
                 <IconWrapper src={DwarfIcon} style={{ 'padding': '5px' }} />
             }
-            {currentType === PieceType.Troll &&
+            {currentType === "Troll" &&
                 <IconWrapper src={TrollIcon} />
             }
         </PieceWrapper>
     )
 }
 
-export {Piece, PieceType}
+export default Piece

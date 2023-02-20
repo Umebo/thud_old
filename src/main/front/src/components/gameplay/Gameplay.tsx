@@ -5,7 +5,9 @@ import SockJS from 'sockjs-client';
 import styled from 'styled-components';
 import cd from '../../config.json';
 import ThudstoneIcon from '../board/pieces/static/thudstone_color.png';
-import { Piece, PieceType } from '../board/pieces/Piece';
+import { useAppDispatch } from '../../redux/Hooks';
+import Piece from '../board/pieces/Piece';
+import { RECEIVE_MOVE } from '../board/pieces/PieceSlice';
 
 const GameplayWrapper = styled.div`
     position: absolute;
@@ -31,8 +33,14 @@ const EmptySpace = styled.div`
 `;
 
 const Gameplay = () => {
+    const dispatch = useAppDispatch();
 
     const board = [];
+    let movementData = {
+        from: "",
+        to: "",
+        type: "",
+    }
 
     let stompClient: any
 
@@ -50,11 +58,17 @@ const Gameplay = () => {
     }
 
     const onMessage = (message: any) => {
-        console.log(message.body);
+        movementData = JSON.parse(message.body)
+
+        dispatch(RECEIVE_MOVE({
+            receivedMovedPieceSource: movementData.from,
+            receivedMovedPieceDestination: movementData.to,
+            receivedMovedPieceType: movementData.type
+        }))
     }
 
-    const showTile = (position: string) => {
-        stompClient.send('/app/message', {}, position);
+    const sendMoveInfo = (moveData: string) => {
+        stompClient.send('/app/message', {}, moveData);
     };
 
     const initialPawnsSetup = (tilePositon: string) => {
@@ -63,25 +77,25 @@ const Gameplay = () => {
             return <EmptySpace />
         } else if(cd.DWARF_STARTING_TILES.includes(tilePositon)) {
             return <Piece 
-                initialType={ PieceType.Dwarf }
+                initialType={ "Dwarf" }
                 position={tilePositon}
-                send={showTile}
+                send={sendMoveInfo}
                 key={tilePositon}
                 ></Piece>
             } else if (cd.TROLL_STARTING_TILES.includes(tilePositon)) {
                 return <Piece 
-                initialType={ PieceType.Troll }
+                initialType={ "Troll" }
                 position={tilePositon}
-                send={showTile}
+                send={sendMoveInfo}
                 key={tilePositon}
                 ></Piece>
             } else if (cd.THUDSTONE_TILE === tilePositon) {
                 return <ThudstoneWrapper key={tilePositon} src={ ThudstoneIcon }/>
             } else {
                 return <Piece 
-                initialType={ PieceType.Empty }
+                initialType={ "Empty" }
                 position={tilePositon}
-                send={showTile}
+                send={sendMoveInfo}
                 key={tilePositon}
             ></Piece>
         }  
@@ -110,35 +124,5 @@ const Gameplay = () => {
             </GameplayWrapper>
     )
 }
-
-/* const initialPawnsSetup = (tilePositon: string, activate: showTile) => {
-
-    if(cd.OUT_OF_BOARD_TILES.includes(tilePositon)) {
-        return <EmptySpace />
-    } else if(cd.DWARF_STARTING_TILES.includes(tilePositon)) {
-        return <Piece 
-            type={ PieceType.Dwarf }
-            position={tilePositon}
-            send={activate}
-            key={tilePositon}
-            ></Piece>
-        } else if (cd.TROLL_STARTING_TILES.includes(tilePositon)) {
-            return <Piece 
-            type={ PieceType.Troll }
-            position={tilePositon}
-            send={activate}
-            key={tilePositon}
-            ></Piece>
-        } else if (cd.THUDSTONE_TILE === tilePositon) {
-            return <ThudstoneWrapper key={tilePositon} src={ ThudstoneIcon }/>
-        } else {
-            return <Piece 
-            type={ PieceType.Empty }
-            position={tilePositon}
-            send={activate}
-            key={tilePositon}
-        ></Piece>
-    }  
-}  */
 
 export default Gameplay;
