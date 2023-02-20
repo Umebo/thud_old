@@ -9,8 +9,6 @@ const BoardWrapper = styled.div`
     width: 855px;
 `;
 
-const rowLengths = [5, 7, 9, 11, 13, 15, 15, 15, 15, 15, 13, 11, 9, 7, 5];
-
 const Board = () => {
     const board = [];
 
@@ -20,9 +18,8 @@ const Board = () => {
             const dimY = cd.VERTICAL_AXIS[i]
 
             board.push(
-                <Grid item>
+                <Grid item key={dimX+dimY}>
                     <Tile
-                        key={dimX+dimY}
                         tileColor={generateTileColor(i, j)}
                         dimX={dimX} 
                         dimY={dimY}
@@ -43,12 +40,10 @@ const Board = () => {
 
 const generateTileColor = (row: number, col: number) => {
     let tilePosition = cd.HORIZONTAL_AXIS[row] + cd.VERTICAL_AXIS[col];
-    let verticalDim = (cd.BOARD_SIZE - rowLengths[row]) / 2;
 
-    if(cd.OUT_OF_BOARD_TILES.includes(tilePosition) || 
-        cd.THUDSTONE_TILE === tilePosition) {
+    if(cd.OUT_OF_BOARD_TILES.includes(tilePosition) || cd.THUDSTONE_TILE === tilePosition) {
         return cd.TILES_COLORS.BACKGROUND
-    } else if((verticalDim + row + col) % 2 !== 0) {
+    } else if((row + col) % 2 !== 0) {
         return cd.TILES_COLORS.DARKER
     } else {
         return cd.TILES_COLORS.BRIGHTER

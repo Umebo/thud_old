@@ -1,11 +1,9 @@
-import { Nav, Navbar, NavbarBrand, NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { Nav, Navbar, NavbarBrand, NavItem, NavLink } from 'reactstrap';
+import { useAppSelector } from '../redux/Hooks';
 
-interface NavProps {
-    isLogged: boolean
-}
-
-const Navigation = ({ isLogged }: NavProps) => {
+const Navigation = () => {
+    const isLogged = useAppSelector((state) => state.login.isLogged);
 
     return (
         <Navbar>

@@ -1,31 +1,26 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Card, Form, FormGroup } from 'reactstrap';
 import axios from 'axios';
 import styled from 'styled-components';
-import configData from "../../../config.json";
-import { LoginService, useInput } from '../../../api/api';
+import configData from "../../../../config.json";
+import { LOGIN } from './LoginSlice';
+import { useInput } from '../../../../api/api';
+import { useAppDispatch } from "../../../../redux/Hooks";
 
 const LoginWrapper = styled.div`
     padding: 10px;
     text-align: center;
 `;
 
-interface LoginProps {
-    signIn: (nickname: any) => any;
-    setLogged: (isLogged: boolean) => any;
-}
-
-const Login = ({ signIn, setLogged }: LoginProps) => {
+const Login = () => {
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
 
     const [input, setInput] = useInput({
         id: 'nickname_input',
         name: 'nickname',
         placeholder: 'Nickname'
     });
-    const [error, setError] = useState('');
-
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
@@ -34,18 +29,16 @@ const Login = ({ signIn, setLogged }: LoginProps) => {
         // SPRAWDZIĆ JAK ZAIMPLEMENTOWAĆ API
         // LoginService.createNickname('test11');
 
-        // TO DZIAŁA
+        //TODO: // TO DZIAŁA ale trzeba zmienić
         axios
-            .post(configData.SERVER_URL + 'login',{}, {
-                params: {nickname: input}
-            })
+            .post(configData.SERVER_URL + '/login', {}, { params: {
+                nickname: input
+            }})
             .then((response) => {
-                setError(response.data);
+                dispatch(LOGIN({
+                    nickname: response.data.nickname
+                }))
             })
-            .catch((error) => console.log(error.message))
-
-        signIn(input)
-        setLogged(true)
         navigate('/')
     }
 
