@@ -1,17 +1,22 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+// import { PieceType } from "../board/pieces/Piece"
 
 interface GameplayState {
-    uuid: string,
-    status: string,
-    player1: string,
-    player2?: string,
+    uuid: string
+    status: string
+    myFraction: string
+    currentTurn: string
+    dwarfPlayer: string
+    trollPlayer?: string
 }
 
 const initialState: GameplayState = {
     uuid: "",
     status: "",
-    player1: "",
-    player2: undefined
+    myFraction: "",
+    currentTurn: "",
+    dwarfPlayer: "",
+    trollPlayer: undefined,
 }
 
 export const gameplaySlice = createSlice({
@@ -19,24 +24,27 @@ export const gameplaySlice = createSlice({
     initialState,
     reducers: {
         CREATE: (state, action: PayloadAction<{ 
-            uuid: string, 
-            status: string,
-            player1: string 
+            uuid: string
+            status: string
+            nickname: string 
         }>) => {
             state.uuid = action.payload.uuid
             state.status = action.payload.status
-            state.player1 = action.payload.player1
+            state.dwarfPlayer = action.payload.nickname
+            state.myFraction = "Dwarf"
+            state.currentTurn = "Dwarf"
         },
         JOIN: (state, action: PayloadAction<{ 
-            uuid: string, 
-            status: string,
-            player1: string,
-            player2: string 
+            uuid: string
+            status: string
+            firstPlayer: string
+            secondPlayer: string
         }>) => {
             state.uuid = action.payload.uuid
             state.status = action.payload.status
-            state.player1 = action.payload.player1
-            state.player2 = action.payload.player2
+            state.dwarfPlayer = action.payload.firstPlayer
+            state.trollPlayer = action.payload.secondPlayer
+            state.myFraction = "Troll"
         }
     }
 });
