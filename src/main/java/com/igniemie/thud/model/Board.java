@@ -22,11 +22,11 @@ public class Board {
     );
 
     private final String[] DWARF_STARTING_TILES = {
-            "F15", "G15", "H15", "I15", "J15",
+            "F15", "G15", "I15", "J15",
             "E14", "K14", "D13", "L13", "C12", "M12", "B11", "N11",
-            "A10", "O10", "A9", "O9", "A8", "O8", "A7", "O7", "A6", "O6",
+            "A10", "O10", "A9", "O9", "A7", "O7", "A6", "O6",
             "B5", "N5", "C4", "M4", "D3", "L3", "E2", "K2",
-            "F1", "G1", "H1", "I1", "J1"
+            "F1", "G1", "I1", "J1"
     };
     private final String[] TROLL_STARTING_TILES = { "G9", "H9", "I9", "G8", "I8", "G7", "H7", "I7" };
     private final String[] OUTSIDE_TILES = {
