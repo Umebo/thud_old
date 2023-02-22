@@ -45,18 +45,17 @@ public class BoardTests {
         board.makeMove("G15", "I13");
         board.makeMove("G9", "F10");
         board.makeMove("M12", "J12");
-        Set<String> DwarfAvailableMoves = Set.of(
-                "G15",
-                "H14", "I14", "J14",
-                "E13", "F13", "G13", "H13", "J13", "K13",
-                "H12", "I12",
-                "G11", "I11",
-                "I10"
-        );
 
         assertEquals(
-                DwarfAvailableMoves,
-                board.getAvailableMoves("I13", "Dwarf"));
+                Set.of(
+                        "G15",
+                        "H14", "I14", "J14",
+                        "E13", "F13", "G13", "H13", "J13", "K13",
+                        "H12", "I12",
+                        "G11", "I11",
+                        "I10"
+                ),
+                board.getAvailableMoves("I13", "Dwarf").getAvailableNormalMoves());
     }
 
     @Test
@@ -64,46 +63,39 @@ public class BoardTests {
         board.makeMove("G15", "E13");
         //TODO: should change to possible moves for troll pawns
         board.makeMove("G9", "G15");
-        Set<String> FirstTrollAvailableMoves = Set.of(
-                "F14", "G14", "H14", "H15"
-        );
-        Set<String> SecondTrollAvailableMoves = Set.of(
-                "G10", "H10", "I10", "G9"
-        );
 
         assertAll(
                 () -> assertEquals(
-                        FirstTrollAvailableMoves,
-                        board.getAvailableMoves("G15", "Troll")),
+                        Set.of("F14", "G14", "H14", "H15"),
+                        board.getAvailableMoves("G15", "Troll").getAvailableNormalMoves()),
                 () -> assertEquals(
-                        SecondTrollAvailableMoves,
-                        board.getAvailableMoves("H9", "Troll"))
+                        Set.of("G10", "H10", "I10", "G9"),
+                        board.getAvailableMoves("H9", "Troll").getAvailableNormalMoves())
         );
     }
 
     @Test
     void shouldReturnProperDwarfAvailableHurls() {
-        board.makeMove("F1", "F5");
-        board.makeMove("M4", "E4");
-        Set<String> FirstDwarfAvailableHurls = Set.of(
-                "H7"
-        );
 
         assertEquals(
-                FirstDwarfAvailableHurls,
+                Collections.emptySet(),
+                board.getDwarfAvailableHurls("G1"));
+
+        board.makeMove("F1", "F5");
+        board.makeMove("M4", "E4");
+
+        assertEquals(
+                Set.of("H7"),
                 board.getDwarfAvailableHurls("F5"));
 
         board.makeMove("G1", "G6");
-        Set<String> SecondDwarfAvailableHurls = Set.of(
-                "G7", "H7"
-        );
 
         assertAll(
                 () -> assertEquals(
                         Collections.emptySet(),
                         board.getDwarfAvailableHurls("F5")),
                 () -> assertEquals(
-                        SecondDwarfAvailableHurls,
+                        Set.of("G7", "H7"),
                         board.getDwarfAvailableHurls("G6"))
         );
     }

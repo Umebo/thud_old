@@ -1,10 +1,11 @@
 package com.igniemie.thud.movement;
 
 import com.igniemie.thud.gameplay.GameplaySession;
+import com.igniemie.thud.movement.dto.AvailableMovesDTO;
+import com.igniemie.thud.movement.dto.MovementDTO;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Set;
 
 @Service
 public class ClassicThudMovementService implements IMovementService{
@@ -13,7 +14,7 @@ public class ClassicThudMovementService implements IMovementService{
     GameplaySession gameplaySession;
 
     @Override
-    public Set<String> getAvailableMoves(String position, String pieceType) {
+    public AvailableMovesDTO getAvailableMoves(String position, String pieceType) {
         return gameplaySession.getBoard().getAvailableMoves(position, pieceType);
     }
 
