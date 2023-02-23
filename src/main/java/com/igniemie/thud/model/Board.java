@@ -168,7 +168,6 @@ public class Board {
     public Set<String> getDwarfAvailableHurls(String currentPosition) {
         List<Pair<Integer, Integer>> possibleMoves = new ArrayList<>();
         Pair<Integer, Integer> coordinates = mapTileSignatureToBoardCoordinates(currentPosition);
-        System.out.println(coordinates);
 
         int vertical = coordinates.getRight();
         int horizontal = coordinates.getLeft();
