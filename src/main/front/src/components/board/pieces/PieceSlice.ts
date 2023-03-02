@@ -6,6 +6,8 @@ interface PieceState {
     chosenPiecePosition: string
     chosenPieceType: string
     availableMoves: string[]
+    availableNormalMoves: string[]
+    availableSpecialMoves: string[]
     moveMadeFrom: string
     receivedMovedPieceSource: string
     receivedMovedPieceDestination: string
@@ -18,6 +20,8 @@ const initialState: PieceState = {
     //FIXME: probably not the best solution
     chosenPieceType: "",
     availableMoves: [],
+    availableNormalMoves: [],
+    availableSpecialMoves: [],
     moveMadeFrom: "",
     receivedMovedPieceSource: "",
     receivedMovedPieceDestination: "",
@@ -37,14 +41,23 @@ export const pieceSlice = createSlice({
             state.chosenPieceType = action.payload.pieceType
         },
         GET_MOVES: (state, action: PayloadAction<{ 
-            availableMoves: string[]
+            availableNormalMoves: string[],
+            availableSpecialMoves: string[],
         }>) => {
-            state.availableMoves = action.payload.availableMoves
+            state.availableNormalMoves = action.payload.availableNormalMoves
+            state.availableSpecialMoves = action.payload.availableSpecialMoves
         },
         CLEAR: (state) => {
             state.isPawnChosen = false
             state.chosenPiecePosition = ""
             state.availableMoves = []
+            state.availableNormalMoves = []
+            state.availableSpecialMoves = []
+        },
+        CHOOSE_MOVE_TYPE: (state, action: PayloadAction<{ 
+            availableMoves: string[]
+        }>) => {
+            state.availableMoves = action.payload.availableMoves
         },
         MAKE_MOVE: (state) => {
             state.moveMadeFrom = state.chosenPiecePosition
@@ -61,5 +74,12 @@ export const pieceSlice = createSlice({
     }
 });
 
-export const { CHOOSE_PIECE, GET_MOVES, CLEAR, MAKE_MOVE, RECEIVE_MOVE } = pieceSlice.actions;
+export const { 
+    CHOOSE_PIECE, 
+    GET_MOVES, 
+    CLEAR, 
+    CHOOSE_MOVE_TYPE, 
+    MAKE_MOVE, 
+    RECEIVE_MOVE 
+} = pieceSlice.actions;
 export default pieceSlice.reducer;

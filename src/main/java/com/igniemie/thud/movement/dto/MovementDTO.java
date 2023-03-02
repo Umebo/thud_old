@@ -1,4 +1,4 @@
-package com.igniemie.thud.movement;
+package com.igniemie.thud.movement.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
