@@ -108,7 +108,7 @@ const Gameplay = () => {
 
             board.push(
                 //TODO: get rid of styling in main function
-                <Grid item style={{'height': '53px'}} key={dimX+dimY} > 
+                <Grid item style={{'height': '53px', 'position': 'relative'}} key={dimX+dimY} > 
                     { initialPawnsSetup(dimX+dimY) } 
                 </Grid>
             );
