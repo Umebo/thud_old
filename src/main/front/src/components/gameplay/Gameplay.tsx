@@ -1,13 +1,13 @@
 import { Grid } from '@mui/material';
-import { Stomp } from '@stomp/stompjs';
 import { useEffect } from 'react';
-import SockJS from 'sockjs-client';
 import styled from 'styled-components';
 import cd from '../../config.json';
 import ThudstoneIcon from '../board/pieces/static/thudstone_color.png';
-import { useAppDispatch } from '../../redux/Hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/Hooks';
 import Piece from '../board/pieces/Piece';
 import { RECEIVE_MOVE } from '../board/pieces/PieceSlice';
+import connect, { sendMoveInfo } from '../SocketsConfig';
+import { INVITE } from './GameplaySlice';
 
 const GameplayWrapper = styled.div`
     position: absolute;
@@ -34,31 +34,27 @@ const EmptySpace = styled.div`
 
 const Gameplay = () => {
     const dispatch = useAppDispatch();
-
+    const uuid = useAppSelector((state) => state.gameplay.uuid)
     const board = [];
-    let movementData = {
-        from: "",
-        to: "",
-        type: "",
-    }
-
-    let stompClient: any
 
     useEffect(() => {
-        connect();
-    }, []);
+        connect(onMessage, onJoin);
+    });
 
-    const connect = () => {
-        var socket = new SockJS('/movement');
-        stompClient = Stomp.over(socket)
-        stompClient.connect({}, function(frame: any) {
-            console.log('Connected: ' + frame);
-            stompClient.subscribe('/topic/mss', onMessage);
-        });
+    const onJoin = (message: any) => {
+        const secondPlayerData = JSON.parse(message.body);
+        console.log(secondPlayerData);
+        
+        if(secondPlayerData.uuid === uuid){
+            dispatch(INVITE({
+                status: secondPlayerData.status,
+                secondPlayer: secondPlayerData.secondPlayer.nickname
+            }))
+        }
     }
 
     const onMessage = (message: any) => {
-        movementData = JSON.parse(message.body)
+        const movementData = JSON.parse(message.body);
 
         dispatch(RECEIVE_MOVE({
             receivedMovedPieceSource: movementData.from,
@@ -66,10 +62,6 @@ const Gameplay = () => {
             receivedMovedPieceType: movementData.type
         }))
     }
-
-    const sendMoveInfo = (moveData: string) => {
-        stompClient.send('/app/message', {}, moveData);
-    };
 
     const initialPawnsSetup = (tilePositon: string) => {
 

@@ -22,22 +22,23 @@ public class GameplaySession {
     private UUID gameUUID;
     private Round round;
     private Board board;
-    private Player player1;
-    private Player player2;
+    private Player firstPlayer;
+    private Player secondPlayer;
     private GameStatus status;
 
     public GameplaySession(Player player) {
         this.gameUUID = UUID.randomUUID();
         this.round = Round.FIRST;
         this.board = new Board();
-        this.player1 = player;
-        this.player1.setType(PlayerType.DWARF);
-        this.player2 = null;
+        this.firstPlayer = player;
+        this.secondPlayer = null;
         this.status = GameStatus.NEW;
     }
 
     public void joinToGame(Player player) {
-        this.player2 = player;
+        this.secondPlayer = player;
+        this.firstPlayer.setType(PlayerType.DWARF);
+        this.secondPlayer.setType(PlayerType.TROLL);
         this.setStatus(GameStatus.IN_PROGRESS);
     }
 
@@ -45,10 +46,11 @@ public class GameplaySession {
         return new GameplayDTO(
                 this.gameUUID.toString(),
                 status.toString(),
-                player1);
+                firstPlayer,
+                secondPlayer);
     }
 
     public Map.Entry<String, String> toGameplayListEntity() {
-        return Map.entry(gameUUID.toString(), player1.getNickname());
+        return Map.entry(gameUUID.toString(), firstPlayer.getNickname());
     }
 }

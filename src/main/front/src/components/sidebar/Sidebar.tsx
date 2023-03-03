@@ -1,7 +1,10 @@
 import styled from 'styled-components';
-import Nickname from './panels/players/Nickname';
-import SecondPlayer from './panels/players/SecondPlayer';
 import Routing from './Routing';
+import Nickname from './panels/players/Nickname';
+import ScoreboardPanel from '../gameplay/ScoreboardPanel';
+import SecondPlayer from './panels/players/SecondPlayer';
+import { useAppSelector } from '../../redux/Hooks';
+
 
 const SidebarWrapper = styled.div`
     margin-left: 855px;
@@ -17,10 +20,14 @@ const PlayersWrapper = styled.div`
 `;
 
 const Sidebar = () => {
+    const gameStatus = useAppSelector((state) => state.gameplay.status);
 
     return(
         <SidebarWrapper>
             <Routing />
+            {gameStatus === "IN_PROGRESS" &&
+                <ScoreboardPanel/>
+            }
             <PlayersWrapper>
                 <Nickname />
                 <SecondPlayer />
