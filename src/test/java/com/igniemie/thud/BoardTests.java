@@ -1,7 +1,9 @@
 package com.igniemie.thud;
 
 import com.igniemie.thud.model.Board;
+import com.igniemie.thud.movement.dto.MovementResultDTO;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -26,9 +28,18 @@ public class BoardTests {
     }
 
     @Test
+    @Disabled
+    void shouldReturnProperSurroundings() {
+
+        assertEquals(
+                Set.of(),
+                board.getTrollAvailableShoves("G7"));
+    }
+
+    @Test
     void shouldMakeProperMoves() {
-        board.makeMove("G15", "I13");
-        board.makeMove("G9", "F10");
+        board.makeMove("G15", "I13", "Dwarf");
+        board.makeMove("G9", "F10", "Troll");
 
         assertAll(
                 // Dwarf move
@@ -42,9 +53,9 @@ public class BoardTests {
 
     @Test
     void shouldReturnProperDwarfAvailableMoves() {
-        board.makeMove("G15", "I13");
-        board.makeMove("G9", "F10");
-        board.makeMove("M12", "J12");
+        board.makeMove("G15", "I13", "Dwarf");
+        board.makeMove("G9", "F10", "Troll");
+        board.makeMove("M12", "J12", "Dwarf");
 
         assertEquals(
                 Set.of(
@@ -60,13 +71,13 @@ public class BoardTests {
 
     @Test
     void shouldReturnProperTrollAvailableMoves() {
-        board.makeMove("G15", "E13");
+        board.makeMove("G15", "E13", "Dwarf");
         //TODO: should change to possible moves for troll pawns
-        board.makeMove("G9", "G15");
+        board.makeMove("G9", "G15", "Troll");
 
         assertAll(
                 () -> assertEquals(
-                        Set.of("F14", "G14", "H14", "H15"),
+                        Set.of("F14", "G14", "H14", "H15", "F15"),
                         board.getAvailableMoves("G15", "Troll").getAvailableNormalMoves()),
                 () -> assertEquals(
                         Set.of("G10", "H10", "I10", "G9"),
@@ -81,14 +92,14 @@ public class BoardTests {
                 Collections.emptySet(),
                 board.getDwarfAvailableHurls("G1"));
 
-        board.makeMove("F1", "F5");
-        board.makeMove("M4", "E4");
+        board.makeMove("F1", "F5", "Dwarf");
+        board.makeMove("M4", "E4", "Dwarf");
 
         assertEquals(
                 Set.of("H7"),
                 board.getDwarfAvailableHurls("F5"));
 
-        board.makeMove("G1", "G6");
+        board.makeMove("G1", "G6", "Dwarf");
 
         assertAll(
                 () -> assertEquals(
@@ -101,12 +112,12 @@ public class BoardTests {
     }
 
     @Test
-    void shouldReturnFalseIfThereIsNoDwarfOnAdjacentTile() {
+    void shouldCheckForDwarfsOnAdjacentTiles() {
 
-        assertFalse(board.isDwarfOnAdjacentTile("I10"));
+        assertFalse(board.isAnyDwarfOnAdjacentTiles("I10"));
 
-        board.makeMove("I15", "I11");
-        assertTrue(board.isDwarfOnAdjacentTile("I10"));
+        board.makeMove("I15", "I11", "Dwarf");
+        assertTrue(board.isAnyDwarfOnAdjacentTiles("I10"));
     }
 
     @Test
@@ -115,7 +126,7 @@ public class BoardTests {
                 Collections.emptySet(),
                 board.getTrollAvailableShoves("I7"));
 
-        board.makeMove("J1", "J6");
+        board.makeMove("J1", "J6", "Dwarf");
         Set<String> FirstTrollAvailableShoves = Set.of(
                 "J7", "K7", "I6", "I5"
         );
@@ -132,7 +143,7 @@ public class BoardTests {
                         board.getTrollAvailableShoves("I8"))
         );
 
-        board.makeMove("F1", "F4");
+        board.makeMove("F1", "F4", "Dwarf");
         Set<String> ThirdTrollAvailableShoves = Set.of(
                 "G5", "G4"
         );
@@ -148,5 +159,18 @@ public class BoardTests {
                         FourthTrollAvailableShoves,
                         board.getTrollAvailableShoves("H7"))
         );
+    }
+
+    @Test
+    void ShouldReturnProperTakenDwarfPositionsAfterShove() {
+        board.makeMove("I9", "J9", "Troll");
+        board.makeMove("L13", "L12", "Dwarf");
+        board.makeMove("N11", "M11", "Dwarf");
+
+        MovementResultDTO shoveResult = board.makeMove("J9", "L11", "Troll");
+
+        assertEquals(
+                Set.of("L12", "M12", "M11"),
+                shoveResult.getTakenPieces());
     }
 }

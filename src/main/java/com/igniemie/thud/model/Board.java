@@ -1,6 +1,7 @@
 package com.igniemie.thud.model;
 
 import com.igniemie.thud.movement.dto.AvailableMovesDTO;
+import com.igniemie.thud.movement.dto.MovementResultDTO;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.tuple.Pair;
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -86,14 +89,39 @@ public class Board {
         return BOARD_SIZE - Integer.parseInt(tileNumber);
     }
 
-    public void makeMove(String from, String to) {
+    public MovementResultDTO makeMove(String from, String to, String type) {
         Pair<Integer, Integer> coordinatesFrom = mapTileSignatureToBoardCoordinates(from);
         Pair<Integer, Integer> coordinatesTo = mapTileSignatureToBoardCoordinates(to);
+        PlayerType movedPieceType = PlayerType.valueOf(type.toUpperCase());
+        Set<Pair<Integer, Integer>> takenPieces;
+
+        switch(movedPieceType){
+            case DWARF ->
+                    takenPieces = checkForTakenTrollPieceAfterHurl(to);
+            case TROLL ->
+                    takenPieces = checkForTakenDwarfPieceAfterShove(to);
+            default ->
+                    takenPieces = Collections.emptySet();
+        }
+
+        for (Pair<Integer, Integer> tile: takenPieces) {
+            this.board[tile.getLeft()][tile.getRight()] = 0;
+        }
 
         int source = this.board[coordinatesFrom.getLeft()][coordinatesFrom.getRight()];
 
         this.board[coordinatesTo.getLeft()][coordinatesTo.getRight()] = source;
         this.board[coordinatesFrom.getLeft()][coordinatesFrom.getRight()] = 0;
+
+
+        return new MovementResultDTO(
+                from,
+                to,
+                type,
+                takenPieces.stream()
+                .map(this::mapBoardCoordinatesToTileSignature)
+                .collect(Collectors.toSet())
+        );
     }
 
     public AvailableMovesDTO getAvailableMoves(String currentPosition, String pieceType) {
@@ -290,7 +318,140 @@ public class Board {
                 .collect(Collectors.toSet());
     }
 
-    public boolean isDwarfOnAdjacentTile(String tile) {
+    public boolean isAnyDwarfOnAdjacentTiles(String position) {
+        Set<Pair<Integer, Integer>> surroundings = getSurroundings(position).stream()
+                .filter(tile -> board[tile.getLeft()][tile.getRight()] == 1)
+                .collect(Collectors.toSet());
+
+        return !surroundings.isEmpty();
+    }
+
+    private Set<String> getTrollAvailableMoves(String position) {
+
+        return getSurroundings(position).stream()
+                .filter(tile -> board[tile.getLeft()][tile.getRight()] == 0)
+                .map(this::mapBoardCoordinatesToTileSignature)
+                .collect(Collectors.toSet());
+    }
+
+    public Set<String> getTrollAvailableShoves(String currentPosition) {
+        List<Pair<Integer, Integer>> possibleMoves = new ArrayList<>();
+        Pair<Integer, Integer> coordinates = mapTileSignatureToBoardCoordinates(currentPosition);
+
+        // Searching Dwarfs in X axis
+        for (int x = coordinates.getRight(), y = coordinates.getLeft()-1, i=0; y >= 0; y--, i++) {
+            if (board[y][x] != 2) {
+                for (int j=1, y2 = coordinates.getLeft(); j <= i+1 && y2+j < BOARD_SIZE; j++) {
+                    if (board[y2+j][x] != 0) break;
+                    if (isAnyDwarfOnAdjacentTiles(mapBoardCoordinatesToTileSignature(Pair.of(y2+j,x)))) {
+                        possibleMoves.add(Pair.of(y2+j, x));
+                    }
+                }
+                break;
+            }
+        }
+        for (int x = coordinates.getRight(), y = coordinates.getLeft()+1, i=0; y < BOARD_SIZE; y++, i++) {
+            if (board[y][x] != 2) {
+                for (int j=1, y2 = coordinates.getLeft(); j <= i+1 && y2-j >= 0; j++) {
+                    if (board[y2-j][x] != 0) break;
+                    if (isAnyDwarfOnAdjacentTiles(mapBoardCoordinatesToTileSignature(Pair.of(y2-j,x)))) {
+                        possibleMoves.add(Pair.of(y2-j, x));
+                    }
+                }
+                break;
+            }
+        }
+        // Searching Dwarfs in Y axis
+        for (int y = coordinates.getLeft(), x = coordinates.getRight()-1, i=0; x >= 0; x--, i++) {
+            if (board[y][x] != 2) {
+                for (int j=1, x2 = coordinates.getRight(); j <= i+1 && x2+j < BOARD_SIZE; j++) {
+                    if (board[y][x2+j] != 0) break;
+                    if (isAnyDwarfOnAdjacentTiles(mapBoardCoordinatesToTileSignature(Pair.of(y,x2+j)))) {
+                        possibleMoves.add(Pair.of(y, x2+j));
+                    }
+                }
+                break;
+            }
+        }
+        for (int y = coordinates.getLeft(), x = coordinates.getRight()+1, i=0; x < BOARD_SIZE; x++, i++) {
+            if (board[y][x] != 2) {
+                for (int j=1, x2 = coordinates.getRight(); j <= i+1 && x2-j >- 0 ; j++) {
+                    if (board[y][x2-j] != 0) break;
+                    if (isAnyDwarfOnAdjacentTiles(mapBoardCoordinatesToTileSignature(Pair.of(y,x2-j)))) {
+                        possibleMoves.add(Pair.of(y, x2-j));
+                    }
+                }
+                break;
+            }
+        }
+        // Searching Dwarfs in top-left-to-bottom-right diagonal
+        for (int y = coordinates.getLeft()-1, x = coordinates.getRight()-1, i=0; x >= 0 && y >= 0; x--, y--, i++) {
+            if (board[y][x] != 2) {
+                for (int j=1, y2 = coordinates.getLeft(), x2 = coordinates.getRight(); j <= i+1 && x2+j < BOARD_SIZE && y2+j < BOARD_SIZE; j++) {
+                    if (board[y2+j][x2+j] != 0) break;
+                    if (isAnyDwarfOnAdjacentTiles(mapBoardCoordinatesToTileSignature(Pair.of(y2+j,x2+j)))) {
+                        possibleMoves.add(Pair.of(y2+j, x2+j));
+                    }
+                }
+                break;
+            }
+        }
+        for (int y = coordinates.getLeft()+1, x = coordinates.getRight()+1, i=0; x < BOARD_SIZE && y < BOARD_SIZE; x++, y++, i++) {
+            if (board[y][x] != 2) {
+                for (int j=1, y2 = coordinates.getLeft(), x2 = coordinates.getRight(); j <= i+1 && x2-j >= 0 && y2-j >= 0; j++) {
+                    if (board[y2-j][x2-j] != 0) break;
+                    if (isAnyDwarfOnAdjacentTiles(mapBoardCoordinatesToTileSignature(Pair.of(y2-j,x2-j)))) {
+                        possibleMoves.add(Pair.of(y2-j, x2-j));
+                    }
+                }
+                break;
+            }
+        }
+        // Searching Dwarfs in top-right-to-bottom-left diagonal
+        for (int y = coordinates.getLeft()+1, x = coordinates.getRight()-1, i=0; x >= 0 && y < BOARD_SIZE; x--, y++, i++) {
+            if (board[y][x] != 2) {
+                for (int j=1, y2 = coordinates.getLeft(), x2 = coordinates.getRight(); j <= i+1 && x2+j < BOARD_SIZE && y2-j >= 0 ; j++) {
+                    if (board[y2-j][x2+j] != 0) break;
+                    if (isAnyDwarfOnAdjacentTiles(mapBoardCoordinatesToTileSignature(Pair.of(y2-j,x2+j)))) {
+                        possibleMoves.add(Pair.of(y2-j, x2+j));
+                    }
+                }
+                break;
+            }
+        }
+        for (int y = coordinates.getLeft()-1, x = coordinates.getRight()+1, i=0; x < BOARD_SIZE && y >= 0; x++, y--, i++) {
+            if (board[y][x] != 2) {
+                for (int j=1, y2 = coordinates.getLeft(), x2 = coordinates.getRight(); j <= i+1 && x2-j >= 0 && y2+j < BOARD_SIZE; j++) {
+                    if (board[y2+j][x2-j] != 0) break;
+                    if (isAnyDwarfOnAdjacentTiles(mapBoardCoordinatesToTileSignature(Pair.of(y2+j,x2-j)))) {
+                        possibleMoves.add(Pair.of(y2+j, x2-j));
+                    }
+                }
+                break;
+            }
+        }
+
+        return possibleMoves.stream()
+                .map(this::mapBoardCoordinatesToTileSignature)
+                .collect(Collectors.toSet());
+    }
+
+    public Set<Pair<Integer, Integer>> checkForTakenTrollPieceAfterHurl(String to) {
+        Pair<Integer, Integer> coordinatesTo = mapTileSignatureToBoardCoordinates(to);
+
+        if(this.board[coordinatesTo.getLeft()][coordinatesTo.getRight()] == 2) {
+            return Set.of(coordinatesTo);
+        } else return Collections.emptySet();
+    }
+    public Set<Pair<Integer, Integer>> checkForTakenDwarfPieceAfterShove(String to) {
+
+        return getSurroundings(to).stream()
+                .filter(tile -> board[tile.getLeft()][tile.getRight()] == 1)
+                .collect(Collectors.toSet());
+    }
+
+    private Set<Pair<Integer, Integer>> getSurroundings(String tile) {
+        Set<Pair<Integer, Integer>> surroundings = new HashSet<>();
         Pair<Integer, Integer> coordinates = mapTileSignatureToBoardCoordinates(tile);
 
         int topBorder = -1;
@@ -310,146 +471,13 @@ public class Board {
 
         for (int i = coordinates.getLeft() + topBorder; i <= coordinates.getLeft() + bottomBorder; i++) {
             for (int j = coordinates.getRight() + leftBorder; j <= coordinates.getRight() + rightBorder; j++) {
-                if (board[i][j] == 1) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private Set<String> getTrollAvailableMoves(String currentPosition) {
-        List<Pair<Integer, Integer>> possibleMoves = new ArrayList<>();
-        Pair<Integer, Integer> coordinates = mapTileSignatureToBoardCoordinates(currentPosition);
-
-        int topBorder = -1;
-        int bottomBorder = 1;
-        int leftBorder = -1;
-        int rightBorder = 1;
-
-        if (coordinates.getLeft() == 0) {
-            topBorder = 0;
-        } else if (coordinates.getLeft() == 14) {
-            bottomBorder = 0;
-        } else if (coordinates.getRight() == 0) {
-            leftBorder = 0;
-        } else if (coordinates.getRight() == 14) {
-            rightBorder = 0;
-        }
-
-        for (int i = coordinates.getLeft() + topBorder; i <= coordinates.getLeft() + bottomBorder; i++) {
-            for (int j = coordinates.getRight() + leftBorder; j <= coordinates.getRight() + rightBorder; j++) {
-                if (board[i][j] == 0) {
-                    possibleMoves.add(Pair.of(i, j));
+                if (board[i][j] != -1) {
+                    surroundings.add(Pair.of(i, j));
                 }
             }
         }
 
-        return possibleMoves.stream()
-                .map(this::mapBoardCoordinatesToTileSignature)
-                .collect(Collectors.toSet());
-    }
-
-    public Set<String> getTrollAvailableShoves(String currentPosition) {
-        List<Pair<Integer, Integer>> possibleMoves = new ArrayList<>();
-        Pair<Integer, Integer> coordinates = mapTileSignatureToBoardCoordinates(currentPosition);
-
-        // Searching Dwarfs in X axis
-        for (int x = coordinates.getRight(), y = coordinates.getLeft()-1, i=0; y >= 0; y--, i++) {
-            if (board[y][x] != 2) {
-                for (int j=1, y2 = coordinates.getLeft(); j <= i+1 && y2+j < BOARD_SIZE; j++) {
-                    if (board[y2+j][x] != 0) break;
-                    if (isDwarfOnAdjacentTile(mapBoardCoordinatesToTileSignature(Pair.of(y2+j,x)))) {
-                        possibleMoves.add(Pair.of(y2+j, x));
-                    }
-                }
-                break;
-            }
-        }
-        for (int x = coordinates.getRight(), y = coordinates.getLeft()+1, i=0; y < BOARD_SIZE; y++, i++) {
-            if (board[y][x] != 2) {
-                for (int j=1, y2 = coordinates.getLeft(); j <= i+1 && y2-j >= 0; j++) {
-                    if (board[y2-j][x] != 0) break;
-                    if (isDwarfOnAdjacentTile(mapBoardCoordinatesToTileSignature(Pair.of(y2-j,x)))) {
-                        possibleMoves.add(Pair.of(y2-j, x));
-                    }
-                }
-                break;
-            }
-        }
-        // Searching Dwarfs in Y axis
-        for (int y = coordinates.getLeft(), x = coordinates.getRight()-1, i=0; x >= 0; x--, i++) {
-            if (board[y][x] != 2) {
-                for (int j=1, x2 = coordinates.getRight(); j <= i+1 && x2+j < BOARD_SIZE; j++) {
-                    if (board[y][x2+j] != 0) break;
-                    if (isDwarfOnAdjacentTile(mapBoardCoordinatesToTileSignature(Pair.of(y,x2+j)))) {
-                        possibleMoves.add(Pair.of(y, x2+j));
-                    }
-                }
-                break;
-            }
-        }
-        for (int y = coordinates.getLeft(), x = coordinates.getRight()+1, i=0; x < BOARD_SIZE; x++, i++) {
-            if (board[y][x] != 2) {
-                for (int j=1, x2 = coordinates.getRight(); j <= i+1 && x2-j >- 0 ; j++) {
-                    if (board[y][x2-j] != 0) break;
-                    if (isDwarfOnAdjacentTile(mapBoardCoordinatesToTileSignature(Pair.of(y,x2-j)))) {
-                        possibleMoves.add(Pair.of(y, x2-j));
-                    }
-                }
-                break;
-            }
-        }
-        // Searching Dwarfs in top-left-to-bottom-right diagonal
-        for (int y = coordinates.getLeft()-1, x = coordinates.getRight()-1, i=0; x >= 0 && y >= 0; x--, y--, i++) {
-            if (board[y][x] != 2) {
-                for (int j=1, y2 = coordinates.getLeft(), x2 = coordinates.getRight(); j <= i+1 && x2+j < BOARD_SIZE && y2+j < BOARD_SIZE; j++) {
-                    if (board[y2+j][x2+j] != 0) break;
-                    if (isDwarfOnAdjacentTile(mapBoardCoordinatesToTileSignature(Pair.of(y2+j,x2+j)))) {
-                        possibleMoves.add(Pair.of(y2+j, x2+j));
-                    }
-                }
-                break;
-            }
-        }
-        for (int y = coordinates.getLeft()+1, x = coordinates.getRight()+1, i=0; x < BOARD_SIZE && y < BOARD_SIZE; x++, y++, i++) {
-            if (board[y][x] != 2) {
-                for (int j=1, y2 = coordinates.getLeft(), x2 = coordinates.getRight(); j <= i+1 && x2-j >= 0 && y2-j >= 0; j++) {
-                    if (board[y2-j][x2-j] != 0) break;
-                    if (isDwarfOnAdjacentTile(mapBoardCoordinatesToTileSignature(Pair.of(y2-j,x2-j)))) {
-                        possibleMoves.add(Pair.of(y2-j, x2-j));
-                    }
-                }
-                break;
-            }
-        }
-        // Searching Dwarfs in top-right-to-bottom-left diagonal
-        for (int y = coordinates.getLeft()+1, x = coordinates.getRight()-1, i=0; x >= 0 && y < BOARD_SIZE; x--, y++, i++) {
-            if (board[y][x] != 2) {
-                for (int j=1, y2 = coordinates.getLeft(), x2 = coordinates.getRight(); j <= i+1 && x2+j < BOARD_SIZE && y2-j >= 0 ; j++) {
-                    if (board[y2-j][x2+j] != 0) break;
-                    if (isDwarfOnAdjacentTile(mapBoardCoordinatesToTileSignature(Pair.of(y2-j,x2+j)))) {
-                        possibleMoves.add(Pair.of(y2-j, x2+j));
-                    }
-                }
-                break;
-            }
-        }
-        for (int y = coordinates.getLeft()-1, x = coordinates.getRight()+1, i=0; x < BOARD_SIZE && y >= 0; x++, y--, i++) {
-            if (board[y][x] != 2) {
-                for (int j=1, y2 = coordinates.getLeft(), x2 = coordinates.getRight(); j <= i+1 && x2-j >= 0 && y2+j < BOARD_SIZE; j++) {
-                    if (board[y2+j][x2-j] != 0) break;
-                    if (isDwarfOnAdjacentTile(mapBoardCoordinatesToTileSignature(Pair.of(y2+j,x2-j)))) {
-                        possibleMoves.add(Pair.of(y2+j, x2-j));
-                    }
-                }
-                break;
-            }
-        }
-
-        return possibleMoves.stream()
-                .map(this::mapBoardCoordinatesToTileSignature)
-                .collect(Collectors.toSet());
+        return surroundings;
     }
 
 }

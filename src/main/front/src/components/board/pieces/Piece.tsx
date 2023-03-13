@@ -58,11 +58,12 @@ const Piece = ({ initialType, position, send }: PieceProps) => {
     const availableMoves = useAppSelector(state => state.piece.availableMoves);
     const availableNormalMoves = useAppSelector(state => state.piece.availableNormalMoves);
     const availableSpecialMoves = useAppSelector(state => state.piece.availableSpecialMoves);
-    const moveMadeFrom = useAppSelector(state => state.piece.moveMadeFrom)
-    const receivedMovedPieceSource = useAppSelector(state => state.piece.receivedMovedPieceSource)
-    const receivedMovedPieceDestination = useAppSelector(state => state.piece.receivedMovedPieceDestination)
-    const receivedMovedPieceType = useAppSelector(state => state.piece.receivedMovedPieceType)
-    const MyFraction = useAppSelector(state => state.gameplay.myFraction)
+    const moveMadeFrom = useAppSelector(state => state.piece.moveMadeFrom);
+    const receivedMovedPieceSource = useAppSelector(state => state.piece.receivedMovedPieceSource);
+    const receivedMovedPieceDestination = useAppSelector(state => state.piece.receivedMovedPieceDestination);
+    const receivedMovedPieceType = useAppSelector(state => state.piece.receivedMovedPieceType);
+    const receivedTakenPieces = useAppSelector((state) => state.piece.receivedTakenPieces);
+    const MyFraction = useAppSelector(state => state.gameplay.myFraction);
     const dispatch = useAppDispatch();
 
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -94,8 +95,8 @@ const Piece = ({ initialType, position, send }: PieceProps) => {
             setCurrentType("Empty")
         }
     }, [moveMadeFrom]);
-
-// change board state after other player move
+    
+    // change board state after other player move
     useEffect(() => {
         if(receivedMovedPieceType !== MyFraction) {
             if(position === receivedMovedPieceSource) {
@@ -106,8 +107,14 @@ const Piece = ({ initialType, position, send }: PieceProps) => {
             }
         }
     }, [receivedMovedPieceType]);
-
-// ------------------------------------- //
+    
+    // clear if contains taken piece
+    useEffect(() => {
+        if(receivedTakenPieces.includes(position)) {
+            setCurrentType("Empty")
+        }
+    }, [receivedTakenPieces]);
+    // ------------------------------------- //
 
     const activate = () => {
         if(!dropdownOpen){
@@ -120,7 +127,6 @@ const Piece = ({ initialType, position, send }: PieceProps) => {
         if(currentType !== "Empty" && currentType === MyFraction) {
             getAvailableMoves();
         }
-        // setActive(true);
     }
 
     const makeMove = () => {
@@ -174,12 +180,6 @@ const Piece = ({ initialType, position, send }: PieceProps) => {
                 'height': '100%',
                 'position': 'relative'
             }}>
-                {currentType === "Dwarf" &&
-                    <IconWrapper src={DwarfIcon} style={{ 'padding': '5px' }} />
-                }
-                {currentType === "Troll" &&
-                    <IconWrapper src={TrollIcon} />
-                }
                 <div>
                     {availableMoves.includes(position) &&
                         <MoveWrapper 
@@ -187,6 +187,12 @@ const Piece = ({ initialType, position, send }: PieceProps) => {
                         onClick={() => makeMove()} />
                     }
                 </div>
+                {currentType === "Dwarf" &&
+                    <IconWrapper src={DwarfIcon} style={{ 'padding': '5px' }} />
+                }
+                {currentType === "Troll" &&
+                    <IconWrapper src={TrollIcon} />
+                }
                 {currentType !== "Empty" && currentType === MyFraction &&
                     <DropdownWrapper>
                         <Dropdown 

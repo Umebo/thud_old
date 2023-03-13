@@ -5,7 +5,7 @@ import cd from '../../config.json';
 import ThudstoneIcon from '../board/pieces/static/thudstone_color.png';
 import { useAppDispatch, useAppSelector } from '../../redux/Hooks';
 import Piece from '../board/pieces/Piece';
-import { RECEIVE_MOVE } from '../board/pieces/PieceSlice';
+import { RECEIVE_MOVE, REMOVE } from '../board/pieces/PieceSlice';
 import connect, { sendMoveInfo } from '../SocketsConfig';
 import { INVITE } from './GameplaySlice';
 
@@ -43,7 +43,6 @@ const Gameplay = () => {
 
     const onJoin = (message: any) => {
         const secondPlayerData = JSON.parse(message.body);
-        console.log(secondPlayerData);
         
         if(secondPlayerData.uuid === uuid){
             dispatch(INVITE({
@@ -55,12 +54,17 @@ const Gameplay = () => {
 
     const onMessage = (message: any) => {
         const movementData = JSON.parse(message.body);
+        console.log(movementData);
+        
 
         dispatch(RECEIVE_MOVE({
             receivedMovedPieceSource: movementData.from,
             receivedMovedPieceDestination: movementData.to,
             receivedMovedPieceType: movementData.type
-        }))
+        }));
+        dispatch(REMOVE({
+            receivedTakenPieces: movementData.takenPieces
+        }));
     }
 
     const initialPawnsSetup = (tilePositon: string) => {

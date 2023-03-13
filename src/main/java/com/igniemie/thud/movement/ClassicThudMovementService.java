@@ -3,6 +3,7 @@ package com.igniemie.thud.movement;
 import com.igniemie.thud.gameplay.GameplaySession;
 import com.igniemie.thud.movement.dto.AvailableMovesDTO;
 import com.igniemie.thud.movement.dto.MovementDTO;
+import com.igniemie.thud.movement.dto.MovementResultDTO;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -19,7 +20,12 @@ public class ClassicThudMovementService implements IMovementService{
     }
 
     @Override
-    public void makeMove(MovementDTO movementDTO) {
-        gameplaySession.getBoard().makeMove(movementDTO.getFrom(), movementDTO.getTo());
+    public MovementResultDTO makeMove(MovementDTO movementDTO) {
+        return gameplaySession.getBoard().makeMove(
+                movementDTO.getFrom(),
+                movementDTO.getTo(),
+                movementDTO.getType());
     }
+
+
 }
