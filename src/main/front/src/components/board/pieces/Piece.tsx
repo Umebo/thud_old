@@ -180,13 +180,6 @@ const Piece = ({ initialType, position, send }: PieceProps) => {
                 'height': '100%',
                 'position': 'relative'
             }}>
-                <div>
-                    {availableMoves.includes(position) &&
-                        <MoveWrapper 
-                        style={{ backgroundColor: 'transparent' }}
-                        onClick={() => makeMove()} />
-                    }
-                </div>
                 {currentType === "Dwarf" &&
                     <IconWrapper src={DwarfIcon} style={{ 'padding': '5px' }} />
                 }
@@ -208,10 +201,10 @@ const Piece = ({ initialType, position, send }: PieceProps) => {
                                     'height': '49px'
                                 }}
                             ></DropdownToggle>
-                            <DropdownMenu
-                                style={{ backgroundColor: 'rgba(180, 180, 180, 0.9)' }}
-                            >
-                                <DropdownItem id='MoveTypeDropdownItem' onClick={() => chooseMoveType("normal")}>Move</DropdownItem>
+                            <DropdownMenu style={{ backgroundColor: 'rgba(180, 180, 180, 0.9)' }}>
+                                <DropdownItem id='MoveTypeDropdownItem' onClick={() => chooseMoveType("normal")}>
+                                    Move
+                                </DropdownItem>
                                 <DropdownItem divider />
                                 <DropdownItem id='MoveTypeDropdownItem' onClick={() => chooseMoveType("special")}>
                                     {currentType === "Dwarf" ? "Hurl" : "Shove"}
@@ -220,6 +213,13 @@ const Piece = ({ initialType, position, send }: PieceProps) => {
                         </Dropdown>
                     </DropdownWrapper>
                 }
+                <div>
+                    {availableMoves.includes(position) &&
+                        <MoveWrapper 
+                        style={{ position: 'absolute', backgroundColor: 'transparent' }}
+                        onClick={() => makeMove()} />
+                    }
+                </div>
             </div>
         </PieceWrapper>
     )
