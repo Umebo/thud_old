@@ -111,7 +111,11 @@ const Piece = ({ initialType, position, send }: PieceProps) => {
     // clear if contains taken piece
     useEffect(() => {
         if(receivedTakenPieces.includes(position)) {
-            setCurrentType("Empty")
+            if(receivedMovedPieceType === "Dwarf") {
+                setCurrentType("Dwarf")
+            } else {
+                setCurrentType("Empty")
+            }
         }
     }, [receivedTakenPieces]);
     // ------------------------------------- //
