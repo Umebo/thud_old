@@ -8,11 +8,12 @@ import Piece from '../board/pieces/Piece';
 import { RECEIVE_MOVE, REMOVE } from '../board/pieces/PieceSlice';
 import connect, { sendMoveInfo } from '../SocketsConfig';
 import { INVITE } from './GameplaySlice';
+import Board from '../board/Board';
+import { Card, CardBody } from 'reactstrap';
 
 const GameplayWrapper = styled.div`
     position: absolute;
-    padding: 30px;
-    width: 855px;
+    flex: 0 0 auto;
 `;
 
 const ThudstoneWrapper = styled.img`
@@ -113,11 +114,16 @@ const Gameplay = () => {
     
 
     return(
-            <GameplayWrapper>
-                <Grid container>
-                    {board}
-                </Grid>
-            </GameplayWrapper>
+        <Card style={{'height': '830px', 'width': '830px', 'margin': '20px', 'flex': '0 0 auto'}}>
+            <CardBody>
+                <GameplayWrapper id='GameplayWrapper'>
+                    <Board />
+                    <Grid container>
+                        {board}
+                    </Grid>
+                </GameplayWrapper>
+            </CardBody>
+        </Card>
     )
 }
 

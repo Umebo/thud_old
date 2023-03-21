@@ -27,7 +27,7 @@ const MoveWrapper = styled.button`
     width: 49px;
     height: 49px;
     border-radius: 5px;
-    backgroundColor: transparent;
+    background-color: transparent;
 `;
 
 const IconWrapper = styled.img`
@@ -209,11 +209,11 @@ const Piece = ({ initialType, position, send }: PieceProps) => {
                                 }}
                             ></DropdownToggle>
                             <DropdownMenu
-                                style={{ backgroundColor: 'rgba(180, 180, 180, 0.7)' }}
+                                style={{ backgroundColor: 'rgba(180, 180, 180, 0.9)' }}
                             >
-                                <DropdownItem onClick={() => chooseMoveType("normal")}>Move</DropdownItem>
+                                <DropdownItem id='MoveTypeDropdownItem' onClick={() => chooseMoveType("normal")}>Move</DropdownItem>
                                 <DropdownItem divider />
-                                <DropdownItem onClick={() => chooseMoveType("special")}>
+                                <DropdownItem id='MoveTypeDropdownItem' onClick={() => chooseMoveType("special")}>
                                     {currentType === "Dwarf" ? "Hurl" : "Shove"}
                                 </DropdownItem>
                             </DropdownMenu>

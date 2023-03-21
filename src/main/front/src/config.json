@@ -15,7 +15,8 @@
     "TILES_COLORS": {
         "DARKER": "#2C3639",
         "BRIGHTER": "#3F4E4F",
-        "BACKGROUND": "#DCD7C9"
+        "BACKGROUND": "#DCD7C9",
+        "EMPTY": "#a27b5c30"
     },
 
     "BOARD_SIZE": 15,
