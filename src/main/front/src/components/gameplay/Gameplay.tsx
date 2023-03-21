@@ -1,15 +1,15 @@
+import styled from 'styled-components';
 import { Grid } from '@mui/material';
 import { useEffect } from 'react';
-import styled from 'styled-components';
-import cd from '../../config.json';
-import ThudstoneIcon from '../board/pieces/static/thudstone_color.png';
+import { Card, CardBody } from 'reactstrap';
 import { useAppDispatch, useAppSelector } from '../../redux/Hooks';
-import Piece from '../board/pieces/Piece';
 import { RECEIVE_MOVE, REMOVE } from '../board/pieces/PieceSlice';
 import connect, { sendMoveInfo } from '../SocketsConfig';
-import { INVITE } from './GameplaySlice';
+import { INVITE, SCORE } from './GameplaySlice';
+import ThudstoneIcon from '../board/pieces/static/thudstone_color.png';
+import Piece from '../board/pieces/Piece';
 import Board from '../board/Board';
-import { Card, CardBody } from 'reactstrap';
+import cd from '../../config.json';
 
 const GameplayWrapper = styled.div`
     position: absolute;
@@ -64,6 +64,10 @@ const Gameplay = () => {
             receivedMovedPieceType: movementData.type
         }));
         dispatch(REMOVE({
+            receivedTakenPieces: movementData.takenPieces
+        }));
+        dispatch(SCORE({
+            receivedMovedPieceType: movementData.type,
             receivedTakenPieces: movementData.takenPieces
         }));
     }
