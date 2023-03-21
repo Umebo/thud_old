@@ -9,13 +9,8 @@ import { useAppSelector } from '../../redux/Hooks';
 const SidebarWrapper = styled.div`
     padding: 20px;
     display: flex;
-    flex: 1;
+    flex: 0;
     flex-direction: column;
-    margin-right: auto;
-`;
-
-const PlayersWrapper = styled.div`
-    margin-top: auto;
 `;
 
 const Sidebar = () => {
@@ -27,10 +22,8 @@ const Sidebar = () => {
             {gameStatus === "IN_PROGRESS" &&
                 <ScoreboardPanel/>
             }
-            <PlayersWrapper>
-                <Nickname />
-                <SecondPlayer />
-            </PlayersWrapper>
+            <Nickname />
+            <SecondPlayer />
         </SidebarWrapper>
     )
 }

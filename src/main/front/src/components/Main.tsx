@@ -9,8 +9,8 @@ import cd from "../config.json";
 const MainWrapper = styled.div`
     width: 100%;
     display: flex;
-    padding-bottom: 30px;
     justify-content: center;
+    padding-bottom: 30px;
     background-color: ${cd.THEME_COLORS.BACKGROUND};
 `;
 
@@ -19,11 +19,13 @@ const Main = () => {
 
     return (
         <MainWrapper id='MainWrapper'>
-            <Routes>
-                <Route path={'/gameplay/' + uuid} element={
-                    <Gameplay />
-                }/>
-            </Routes>
+            <div>
+                <Routes>
+                    <Route path={'/gameplay/' + uuid} element={
+                        <Gameplay />
+                    }/>
+                </Routes>
+            </div>
             <Sidebar />
         </MainWrapper>
     );

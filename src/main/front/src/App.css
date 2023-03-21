@@ -11,6 +11,7 @@ html, body, #root {
 
 #root {
   font-family: 'Kalam', sans-serif;
+  color: #2C3639;
 }
 
 
@@ -39,9 +40,9 @@ html, body, #root {
 /* --------- SIDEBAR CARDS --------- */
 
 .card {
-  background-color: #a27b5c00;
+  background-color: #a27b5c50;
   margin-bottom: 20px;
-  width: 400px;
+  width: 300px;
 }
 
 #nickname {
