@@ -2,6 +2,7 @@ package com.igniemie.thud.movement;
 
 import com.igniemie.thud.movement.dto.AvailableMovesDTO;
 import com.igniemie.thud.movement.dto.MovementDTO;
+import com.igniemie.thud.movement.dto.MovementResultDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -24,8 +25,7 @@ public class MovementController {
 
     @MessageMapping("/message")
     @SendTo("/topic/mss")
-    public MovementDTO receiveMessage(@RequestParam MovementDTO movementDTO) {
-        movementService.makeMove(movementDTO);
-        return movementDTO;
+    public MovementResultDTO makeMove(@RequestParam MovementDTO movementDTO) {
+        return movementService.makeMove(movementDTO);
     }
 }

@@ -1,10 +1,7 @@
 package com.igniemie.thud.gameplay;
 
-import com.igniemie.thud.session.PlayerSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -21,11 +18,11 @@ import java.util.UUID;
 public class GameplayController {
 
     @Autowired
+    private SimpMessagingTemplate template;
+    @Autowired
     GameplayService gameplayService;
     @Resource
     GameplaySession gameplaySession;
-    @Resource
-    PlayerSession playerSession;
 
     @GetMapping("/check")
     public UUID checkGame() {
@@ -46,7 +43,8 @@ public class GameplayController {
     public GameplayDTO jointToExistingGame(
             @RequestParam String uuid,
             @RequestParam String nickname) {
-        return gameplayService.addPlayerToGame(uuid, nickname);
+        GameplayDTO gameplayDTO =  gameplayService.addPlayerToGame(uuid, nickname);
+        this.template.convertAndSend("/topic/join", gameplayDTO);
+        return gameplayDTO;
     }
-
 }

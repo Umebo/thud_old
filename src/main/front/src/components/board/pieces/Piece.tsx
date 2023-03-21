@@ -27,7 +27,7 @@ const MoveWrapper = styled.button`
     width: 49px;
     height: 49px;
     border-radius: 5px;
-    backgroundColor: transparent;
+    background-color: transparent;
 `;
 
 const IconWrapper = styled.img`
@@ -58,11 +58,12 @@ const Piece = ({ initialType, position, send }: PieceProps) => {
     const availableMoves = useAppSelector(state => state.piece.availableMoves);
     const availableNormalMoves = useAppSelector(state => state.piece.availableNormalMoves);
     const availableSpecialMoves = useAppSelector(state => state.piece.availableSpecialMoves);
-    const moveMadeFrom = useAppSelector(state => state.piece.moveMadeFrom)
-    const receivedMovedPieceSource = useAppSelector(state => state.piece.receivedMovedPieceSource)
-    const receivedMovedPieceDestination = useAppSelector(state => state.piece.receivedMovedPieceDestination)
-    const receivedMovedPieceType = useAppSelector(state => state.piece.receivedMovedPieceType)
-    const MyFraction = useAppSelector(state => state.gameplay.myFraction)
+    const moveMadeFrom = useAppSelector(state => state.piece.moveMadeFrom);
+    const receivedMovedPieceSource = useAppSelector(state => state.piece.receivedMovedPieceSource);
+    const receivedMovedPieceDestination = useAppSelector(state => state.piece.receivedMovedPieceDestination);
+    const receivedMovedPieceType = useAppSelector(state => state.piece.receivedMovedPieceType);
+    const receivedTakenPieces = useAppSelector((state) => state.piece.receivedTakenPieces);
+    const MyFraction = useAppSelector(state => state.gameplay.myFraction);
     const dispatch = useAppDispatch();
 
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -94,8 +95,8 @@ const Piece = ({ initialType, position, send }: PieceProps) => {
             setCurrentType("Empty")
         }
     }, [moveMadeFrom]);
-
-// change board state after other player move
+    
+    // change board state after other player move
     useEffect(() => {
         if(receivedMovedPieceType !== MyFraction) {
             if(position === receivedMovedPieceSource) {
@@ -106,8 +107,18 @@ const Piece = ({ initialType, position, send }: PieceProps) => {
             }
         }
     }, [receivedMovedPieceType]);
-
-// ------------------------------------- //
+    
+    // clear if contains taken piece
+    useEffect(() => {
+        if(receivedTakenPieces.includes(position)) {
+            if(receivedMovedPieceType === "Dwarf") {
+                setCurrentType("Dwarf")
+            } else {
+                setCurrentType("Empty")
+            }
+        }
+    }, [receivedTakenPieces]);
+    // ------------------------------------- //
 
     const activate = () => {
         if(!dropdownOpen){
@@ -120,7 +131,6 @@ const Piece = ({ initialType, position, send }: PieceProps) => {
         if(currentType !== "Empty" && currentType === MyFraction) {
             getAvailableMoves();
         }
-        // setActive(true);
     }
 
     const makeMove = () => {
@@ -180,13 +190,6 @@ const Piece = ({ initialType, position, send }: PieceProps) => {
                 {currentType === "Troll" &&
                     <IconWrapper src={TrollIcon} />
                 }
-                <div>
-                    {availableMoves.includes(position) &&
-                        <MoveWrapper 
-                        style={{ backgroundColor: 'transparent' }}
-                        onClick={() => makeMove()} />
-                    }
-                </div>
                 {currentType !== "Empty" && currentType === MyFraction &&
                     <DropdownWrapper>
                         <Dropdown 
@@ -202,18 +205,25 @@ const Piece = ({ initialType, position, send }: PieceProps) => {
                                     'height': '49px'
                                 }}
                             ></DropdownToggle>
-                            <DropdownMenu
-                                style={{ backgroundColor: 'rgba(180, 180, 180, 0.7)' }}
-                            >
-                                <DropdownItem onClick={() => chooseMoveType("normal")}>Move</DropdownItem>
+                            <DropdownMenu style={{ backgroundColor: 'rgba(180, 180, 180, 0.9)' }}>
+                                <DropdownItem id='MoveTypeDropdownItem' onClick={() => chooseMoveType("normal")}>
+                                    Move
+                                </DropdownItem>
                                 <DropdownItem divider />
-                                <DropdownItem onClick={() => chooseMoveType("special")}>
+                                <DropdownItem id='MoveTypeDropdownItem' onClick={() => chooseMoveType("special")}>
                                     {currentType === "Dwarf" ? "Hurl" : "Shove"}
                                 </DropdownItem>
                             </DropdownMenu>
                         </Dropdown>
                     </DropdownWrapper>
                 }
+                <div>
+                    {availableMoves.includes(position) &&
+                        <MoveWrapper 
+                        style={{ position: 'absolute', backgroundColor: 'transparent' }}
+                        onClick={() => makeMove()} />
+                    }
+                </div>
             </div>
         </PieceWrapper>
     )

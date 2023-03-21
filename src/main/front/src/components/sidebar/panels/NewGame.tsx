@@ -37,7 +37,7 @@ const NewGame = () => {
                 dispatch(CREATE( {
                     uuid: response.data.uuid,
                     status: response.data.status,
-                    nickname: response.data.player.nickname,
+                    nickname: response.data.firstPlayer.nickname,
                 } ))
 
                 navigate("/gameplay/" + response.data.uuid);
@@ -52,10 +52,12 @@ const NewGame = () => {
                 uuid: uuid
             }})
             .then((response) => {
+                console.log(response.data);
+                
                 dispatch(JOIN( {
                     uuid: uuid,
                     status: response.data.status,
-                    firstPlayer: response.data.player1,
+                    firstPlayer: response.data.firstPlayer.nickname,
                     secondPlayer: nickname,
                 }))
             })

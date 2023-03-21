@@ -14,6 +14,6 @@ public class GameplayDTO {
 
     private String uuid;
     private String status;
-    private Player player;
-//    private String[] board;
+    private Player firstPlayer;
+    private Player secondPlayer;
 }

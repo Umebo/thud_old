@@ -12,6 +12,7 @@ interface PieceState {
     receivedMovedPieceSource: string
     receivedMovedPieceDestination: string
     receivedMovedPieceType: string
+    receivedTakenPieces: string[]
 }
 
 const initialState: PieceState = {
@@ -26,6 +27,7 @@ const initialState: PieceState = {
     receivedMovedPieceSource: "",
     receivedMovedPieceDestination: "",
     receivedMovedPieceType: "",
+    receivedTakenPieces: [],
 }
 
 export const pieceSlice = createSlice({
@@ -70,6 +72,11 @@ export const pieceSlice = createSlice({
             state.receivedMovedPieceSource = action.payload.receivedMovedPieceSource
             state.receivedMovedPieceDestination = action.payload.receivedMovedPieceDestination
             state.receivedMovedPieceType = action.payload.receivedMovedPieceType
+        },
+        REMOVE: (state, action: PayloadAction<{ 
+            receivedTakenPieces: string[]
+        }>) => {
+            state.receivedTakenPieces = action.payload.receivedTakenPieces
         }
     }
 });
@@ -80,6 +87,7 @@ export const {
     CLEAR, 
     CHOOSE_MOVE_TYPE, 
     MAKE_MOVE, 
-    RECEIVE_MOVE 
+    RECEIVE_MOVE,
+    REMOVE
 } = pieceSlice.actions;
 export default pieceSlice.reducer;

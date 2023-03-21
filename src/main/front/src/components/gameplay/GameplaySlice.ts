@@ -8,6 +8,8 @@ interface GameplayState {
     currentTurn: string
     dwarfPlayer: string
     trollPlayer?: string
+    dwarfPlayerPoints: number
+    trollPlayerPoints: number
 }
 
 const initialState: GameplayState = {
@@ -17,6 +19,8 @@ const initialState: GameplayState = {
     currentTurn: "",
     dwarfPlayer: "",
     trollPlayer: undefined,
+    dwarfPlayerPoints: 0,
+    trollPlayerPoints: 0,
 }
 
 export const gameplaySlice = createSlice({
@@ -45,7 +49,24 @@ export const gameplaySlice = createSlice({
             state.dwarfPlayer = action.payload.firstPlayer
             state.trollPlayer = action.payload.secondPlayer
             state.myFraction = "Troll"
-        }
+        },
+        INVITE: (state, action: PayloadAction<{ 
+            status: string
+            secondPlayer: string
+        }>) => {
+            state.status = action.payload.status
+            state.trollPlayer = action.payload.secondPlayer
+        },
+        SCORE: (state, action: PayloadAction<{ 
+            receivedMovedPieceType: string
+            receivedTakenPieces: string[]
+        }>) => {
+            if(action.payload.receivedMovedPieceType === "Dwarf") {
+                state.dwarfPlayerPoints += (action.payload.receivedTakenPieces.length * 4)
+            } else if(action.payload.receivedMovedPieceType === "Troll") {
+                state.trollPlayerPoints += action.payload.receivedTakenPieces.length
+            }
+        },
     }
 });
 
@@ -53,7 +74,7 @@ export default gameplaySlice.reducer;
 
 // Actions
 
-export const { CREATE, JOIN } = gameplaySlice.actions;
+export const { CREATE, JOIN, INVITE, SCORE } = gameplaySlice.actions;
 
 //TODO: move axios actions here
 
