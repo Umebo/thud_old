@@ -5,8 +5,7 @@ import { Grid } from '@mui/material';
 
 const BoardWrapper = styled.div`
     position: absolute;
-    padding: 30px;
-    width: 855px;
+    width: 800px;
 `;
 
 const Board = () => {
@@ -42,7 +41,7 @@ const generateTileColor = (row: number, col: number) => {
     let tilePosition = cd.HORIZONTAL_AXIS[row] + cd.VERTICAL_AXIS[col];
 
     if(cd.OUT_OF_BOARD_TILES.includes(tilePosition) || cd.THUDSTONE_TILE === tilePosition) {
-        return cd.TILES_COLORS.BACKGROUND
+        return 'transparent'
     } else if((row + col) % 2 !== 0) {
         return cd.TILES_COLORS.DARKER
     } else {

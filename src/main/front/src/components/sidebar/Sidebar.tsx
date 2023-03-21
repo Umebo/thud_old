@@ -7,12 +7,11 @@ import { useAppSelector } from '../../redux/Hooks';
 
 
 const SidebarWrapper = styled.div`
-    margin-left: 855px;
-    width: 400px;
     padding: 20px;
-    flex: 1;
     display: flex;
+    flex: 1;
     flex-direction: column;
+    margin-right: auto;
 `;
 
 const PlayersWrapper = styled.div`
@@ -23,7 +22,7 @@ const Sidebar = () => {
     const gameStatus = useAppSelector((state) => state.gameplay.status);
 
     return(
-        <SidebarWrapper>
+        <SidebarWrapper id='SidebarWrapper'>
             <Routing />
             {gameStatus === "IN_PROGRESS" &&
                 <ScoreboardPanel/>

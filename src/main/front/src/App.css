@@ -10,7 +10,7 @@ html, body, #root {
 }
 
 #root {
-  font-family: 'Rubik Mono One';
+  font-family: 'Kalam', sans-serif;
 }
 
 
@@ -21,24 +21,27 @@ html, body, #root {
   background-color: #2C3639;
   padding-top: 0;
   padding-bottom: 0;
+  justify-content: center
 }
 
 .navbar-brand, .navbar-brand:hover, .navbar-brand:visited {
-  font-size: 3rem;
+  font-family: 'Permanent Marker', sans-serif;
+  font-size: 3.5rem;
   padding-left: 1rem;
   color: #A27B5C;
 }
 
 .nav-link {
-  font-size: large;
+  font-size: 2rem;
   color: #A27B5C;
 }
 
 /* --------- SIDEBAR CARDS --------- */
 
 .card {
-  background-color: #a27b5caf;
+  background-color: #a27b5c00;
   margin-bottom: 20px;
+  width: 400px;
 }
 
 #nickname {
@@ -46,4 +49,10 @@ html, body, #root {
   right: 20px;
   bottom: 30px;
   /* margin-bottom: 0; */
+}
+
+/* ------------- BOARD ------------- */
+
+#MoveTypeDropdownItem {
+  padding: 0 16px 0 16px;
 }
