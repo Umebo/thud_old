@@ -38,7 +38,7 @@ const Navigation = () => {
                     <NavItem>
                         <NavItemWrapper>
                             <FaBook style={NavItemIconStyle}/>
-                            <NavLink tag={Link} to="/" disabled>Rules</NavLink>
+                            <NavLink tag={Link} to="/rules">Rules</NavLink>
                         </NavItemWrapper>
                     </NavItem>
                     {isLogged &&
