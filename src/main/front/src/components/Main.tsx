@@ -1,10 +1,7 @@
 import '../App.css';
 import styled from 'styled-components';
-import { Route, Routes } from 'react-router-dom';
-import { useAppSelector } from '../redux/Hooks';
-import Sidebar from './sidebar/Sidebar';
-import Gameplay from './gameplay/Gameplay';
 import cd from "../config.json";
+import Routing from './sidebar/Routing';
 
 const MainWrapper = styled.div`
     width: 100%;
@@ -15,21 +12,11 @@ const MainWrapper = styled.div`
 `;
 
 const Main = () => {
-    const uuid = useAppSelector((state) => state.gameplay.uuid)
-
     return (
         <MainWrapper id='MainWrapper'>
-            <div>
-                <Routes>
-                    <Route path={'/gameplay/' + uuid} element={
-                        <Gameplay />
-                    }/>
-                </Routes>
-            </div>
-            <Sidebar />
+            <Routing />
         </MainWrapper>
     );
-
 }
 
 export default Main;
