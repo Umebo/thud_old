@@ -6,6 +6,7 @@ import Login from './panels/login/Login';
 import NewGame from './panels/NewGame';
 import Gameplay from '../gameplay/Gameplay';
 import Sidebar from './Sidebar';
+import Frontpage from '../frontpage/Frontpage';
 
 const GameWrapper = styled.div`
     display: flex
@@ -16,6 +17,9 @@ const Routing = () => {
 
     return(
         <Routes>
+            <Route path='/' element={
+                <Frontpage />
+            }/>
             <Route path='/login' element={
                 <Login />
             }/>
