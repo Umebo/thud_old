@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import Routing from './Routing';
 import Nickname from './panels/players/Nickname';
 import ScoreboardPanel from '../gameplay/ScoreboardPanel';
 import SecondPlayer from './panels/players/SecondPlayer';
@@ -18,7 +17,6 @@ const Sidebar = () => {
 
     return(
         <SidebarWrapper id='SidebarWrapper'>
-            <Routing />
             {gameStatus === "IN_PROGRESS" &&
                 <ScoreboardPanel/>
             }
