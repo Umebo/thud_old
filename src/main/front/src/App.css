@@ -63,7 +63,26 @@ html, body, #root {
   color: #EDE6E0;
 }
 
-#login_btn {
-  color: #2C3639;
+#endround {
+  display: flex;
+  justify-content: center;
+}
+
+#login_btn, #endround_btn, #newgame_btn {
+  color: #e2ddcf;
   font-family: 'Kalam', sans-serif;
+}
+
+#scoreboard_title {
+  font-size: 1.5rem;
+  padding-top: 20px;
+  padding-left: 20px;
+}
+
+#players_column {
+  align-items: flex-start;
+}
+
+.round_column_show {
+  background-color: #c8b49e;
 }
