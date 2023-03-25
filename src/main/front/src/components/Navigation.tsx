@@ -18,7 +18,7 @@ const NavItemWrapper = styled.div`
 `
 const NavItemIconStyle = {
     'color': cd.THEME_COLORS.FONT,
-    'font-size': '1.5rem'
+    'fontSize': '1.5rem'
 }
 
 const Navigation = () => {

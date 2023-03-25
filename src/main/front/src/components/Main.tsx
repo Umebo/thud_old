@@ -1,7 +1,7 @@
 import '../App.css';
 import styled from 'styled-components';
 import cd from "../config.json";
-import Routing from './sidebar/Routing';
+import Routing from './Routing';
 
 const MainWrapper = styled.div`
     width: 100%;
