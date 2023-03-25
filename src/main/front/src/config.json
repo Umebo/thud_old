@@ -12,6 +12,13 @@
     "SIDEBAR_COLORS": {
         "BACKGORUND": "#a27b5c96"
     },
+    "LOGIN_COLORS": {
+        "FONT": "#2C3639",
+        "BACKGORUND": "#d0c0ac",
+        "PLACEHOLDER": "#EDE6E0",
+        "PLACEHOLDER_FONT": "#C2AF99",
+        "BUTTON": "#CABBA7"
+    },
     "TILES_COLORS": {
         "DARKER": "#2C3639",
         "BRIGHTER": "#3F4E4F",

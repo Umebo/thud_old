@@ -57,3 +57,13 @@ html, body, #root {
 #MoveTypeDropdownItem {
   padding: 0 16px 0 16px;
 }
+
+::placeholder {
+  font-family: 'Kalam', sans-serif;
+  color: #EDE6E0;
+}
+
+#login_btn {
+  color: #2C3639;
+  font-family: 'Kalam', sans-serif;
+}
