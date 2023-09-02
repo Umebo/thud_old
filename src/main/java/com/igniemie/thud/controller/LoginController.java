@@ -5,6 +5,7 @@ import com.igniemie.thud.model.Player;
 import com.igniemie.thud.service.ILoginService;
 import com.igniemie.thud.session.PlayerSession;
 import com.igniemie.thud.validator.NicknameValidator;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 @RestController
 @RequestMapping(value = "/login")
