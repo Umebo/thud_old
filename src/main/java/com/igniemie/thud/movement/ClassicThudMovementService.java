@@ -6,7 +6,7 @@ import com.igniemie.thud.movement.dto.MovementDTO;
 import com.igniemie.thud.movement.dto.MovementResultDTO;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 
 @Service
 public class ClassicThudMovementService implements IMovementService{
