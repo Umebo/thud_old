@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 import Nickname from './panels/players/Nickname';
 import ScoreboardPanel from '../gameplay/ScoreboardPanel';
-import SecondPlayer from './panels/players/SecondPlayer';
+// import SecondPlayer from './panels/players/SecondPlayer';
 import { useAppSelector } from '../../redux/Hooks';
+import EndRound from './panels/EndRound';
 
 
 const SidebarWrapper = styled.div`
+    margin-top: 40px;
     padding: 20px;
     display: flex;
     flex: 0;
@@ -21,7 +23,8 @@ const Sidebar = () => {
                 <ScoreboardPanel/>
             }
             <Nickname />
-            <SecondPlayer />
+            <EndRound />
+            {/* <SecondPlayer /> */}
         </SidebarWrapper>
     )
 }

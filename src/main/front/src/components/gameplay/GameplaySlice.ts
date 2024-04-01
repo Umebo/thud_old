@@ -6,10 +6,13 @@ interface GameplayState {
     status: string
     myFraction: string
     currentTurn: string
+    currentRound: number
     dwarfPlayer: string
-    trollPlayer?: string
-    dwarfPlayerPoints: number
-    trollPlayerPoints: number
+    trollPlayer: string
+    dwarfPlayerPointsRound1: number
+    trollPlayerPointsRound1: number
+    dwarfPlayerPointsRound2: number
+    trollPlayerPointsRound2: number
 }
 
 const initialState: GameplayState = {
@@ -17,10 +20,13 @@ const initialState: GameplayState = {
     status: "",
     myFraction: "",
     currentTurn: "",
+    currentRound: 1,
     dwarfPlayer: "",
-    trollPlayer: undefined,
-    dwarfPlayerPoints: 0,
-    trollPlayerPoints: 0,
+    trollPlayer: "",
+    dwarfPlayerPointsRound1: 0,
+    trollPlayerPointsRound1: 0,
+    dwarfPlayerPointsRound2: 0,
+    trollPlayerPointsRound2: 0,
 }
 
 export const gameplaySlice = createSlice({
@@ -62,11 +68,23 @@ export const gameplaySlice = createSlice({
             receivedTakenPieces: string[]
         }>) => {
             if(action.payload.receivedMovedPieceType === "Dwarf") {
-                state.dwarfPlayerPoints += (action.payload.receivedTakenPieces.length * 4)
+                state.currentRound === 1 
+                    ? state.dwarfPlayerPointsRound1 += (action.payload.receivedTakenPieces.length * 4)
+                    : state.dwarfPlayerPointsRound2 += (action.payload.receivedTakenPieces.length * 4)
             } else if(action.payload.receivedMovedPieceType === "Troll") {
-                state.trollPlayerPoints += action.payload.receivedTakenPieces.length
+                state.currentRound === 1
+                ? state.trollPlayerPointsRound1 += action.payload.receivedTakenPieces.length
+                : state.trollPlayerPointsRound2 += action.payload.receivedTakenPieces.length
             }
         },
+        NEXT_ROUND: (state) => {
+            const prevDwarfPlayer = state.dwarfPlayer;
+
+            state.dwarfPlayer = state.trollPlayer;
+            state.trollPlayer = prevDwarfPlayer;
+            state.currentRound = 2;
+            state.currentTurn = "Dwarf";
+        }
     }
 });
 
@@ -74,7 +92,7 @@ export default gameplaySlice.reducer;
 
 // Actions
 
-export const { CREATE, JOIN, INVITE, SCORE } = gameplaySlice.actions;
+export const { CREATE, JOIN, INVITE, SCORE, NEXT_ROUND } = gameplaySlice.actions;
 
 //TODO: move axios actions here
 

@@ -5,6 +5,16 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from '../../../redux/Hooks';
 import { CREATE, JOIN } from '../../gameplay/GameplaySlice';
+import styled from 'styled-components';
+
+const NewGameWrapper = styled.div`
+    margin-top: 40px;
+    padding: 20px;
+    display: flex;
+    flex: 0;
+    flex-direction: column;
+    align-items: center;
+`
 
 const NewGame = () => {
     const navigate = useNavigate();
@@ -85,13 +95,16 @@ const NewGame = () => {
     }
 
     return(
-        <>
+        <NewGameWrapper>
             <Card>
-                <Button onClick={() => createNewGame()}>
+                <Button id='newgame_btn' onClick={() => createNewGame()}>
                     Create new game
                 </Button>
             </Card>
-            <Card>
+            <div>
+                <h3>OR</h3>
+            </div>
+            <Card style={{'width': '500px'}}>
                 <CardHeader>
                     Join to existing game
                 </CardHeader>
@@ -101,7 +114,7 @@ const NewGame = () => {
                     </List>
                 </CardBody>
             </Card>
-        </>
+        </NewGameWrapper>
     )
 }
 
