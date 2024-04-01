@@ -6,13 +6,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class GameplayDTO {
 
-    private String uuid;
+    private UUID uuid;
     private String status;
     private Player firstPlayer;
     private Player secondPlayer;

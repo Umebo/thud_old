@@ -44,7 +44,7 @@ public class GameplaySession {
 
     public GameplayDTO toGameplayDTO() {
         return new GameplayDTO(
-                this.gameUUID.toString(),
+                gameUUID,
                 status.toString(),
                 firstPlayer,
                 secondPlayer);
