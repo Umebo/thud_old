@@ -1,4 +1,4 @@
-package com.igniemie.thud.socket;
+package com.igniemie.thud.socket.messages;
 
 public enum
 MessageType {

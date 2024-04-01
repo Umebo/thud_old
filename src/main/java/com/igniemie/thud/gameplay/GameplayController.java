@@ -43,7 +43,7 @@ public class GameplayController {
     public GameplayDTO jointToExistingGame(
             @RequestParam String uuid,
             @RequestParam String nickname) {
-        GameplayDTO gameplayDTO =  gameplayService.addPlayerToGame(uuid, nickname);
+        GameplayDTO gameplayDTO =  gameplayService.addPlayerToGame(UUID.fromString(uuid), nickname);
         this.template.convertAndSend("/topic/join", gameplayDTO);
         return gameplayDTO;
     }

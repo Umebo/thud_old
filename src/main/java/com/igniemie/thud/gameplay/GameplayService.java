@@ -40,9 +40,9 @@ public class GameplayService {
         return gameplayDTO;
     }
 
-    public GameplayDTO addPlayerToGame(String gameUUID, String nickname) {
+    public GameplayDTO addPlayerToGame(UUID gameUUID, String nickname) {
         for (GameplaySession gameSession: gameplayList) {
-            if (gameSession.getGameUUID().equals(UUID.fromString(gameUUID))) {
+            if (gameSession.getGameUUID().equals(gameUUID)) {
                 gameSession.joinToGame(new Player(nickname));
                 return gameSession.toGameplayDTO();
             }
